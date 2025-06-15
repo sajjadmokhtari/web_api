@@ -1,0 +1,1 @@
+{"level":"info","ts":"2025-06-02T00:13:59.023+0330","caller":"db/postgres.go:48","msg":"Db connection established","Sub":"","Category":"Postgres"}
