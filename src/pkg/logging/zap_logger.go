@@ -9,14 +9,18 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// test comment
-var logLevelMap = map[string]zapcore.Level{
+
+
+
+var zapSinLogger *zap.SugaredLogger
+
+var zapLogLevelMap = map[string]zapcore.Level{
 	"debug": zapcore.DebugLevel,
 	"info":  zapcore.InfoLevel,
 	"warn":  zapcore.WarnLevel,
 	"error": zapcore.ErrorLevel,
 	"fatal": zapcore.FatalLevel,
-}// نگاشت سطح‌های لاگ
+} // نگاشت سطح‌های لاگ
 
 type ZapLogger struct {
 	cfg    *config.Config
@@ -30,7 +34,7 @@ func NewZapLogger(cfg *config.Config) *ZapLogger {
 }
 
 func (l *ZapLogger) getLogLevel() zapcore.Level {
-	level, exists := logLevelMap[l.cfg.Logger.Level]
+	level, exists := zapLogLevelMap[l.cfg.Logger.Level]
 	if !exists {
 		return zapcore.DebugLevel
 	}
@@ -38,10 +42,11 @@ func (l *ZapLogger) getLogLevel() zapcore.Level {
 }
 
 func (l *ZapLogger) Init() {
+	once.Do(func() {
 	w := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   l.cfg.Logger.Filepath,// ادرس اون فایلی که توی داکر یمل هست
-		MaxSize:    1, // megabytes
-		MaxAge:     5, // days
+		Filename:   l.cfg.Logger.Filepath, // ادرس اون فایلی که توی داکر یمل هست
+		MaxSize:    1,                     // megabytes
+		MaxAge:     5,                     // days
 		LocalTime:  true,
 		MaxBackups: 10,
 		Compress:   true,
@@ -58,7 +63,11 @@ func (l *ZapLogger) Init() {
 
 	logger := zap.New(core, zap.AddCaller(),
 		zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel)).Sugar()
-	l.logger = logger
+
+
+	zapSinLogger = logger.With("Appname", "MyAPP", "LoggerName", "zap")
+})
+	l.logger = zapSinLogger
 
 }
 func (l *ZapLogger) Debug(cat Category, sub SubCategory, msg string, extra map[ExtraKey]interface{}) {
@@ -109,5 +118,5 @@ func prepareLogKeys(extra map[ExtraKey]interface{}, cat Category, sub SubCategor
 	extra["Category"] = cat
 	extra["Sub"] = sub
 	params := mapToZapParams(extra)
-    return params
+	return params
 }

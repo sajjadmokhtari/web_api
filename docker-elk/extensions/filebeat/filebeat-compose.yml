@@ -31,3 +31,10 @@ services:
       - elk
     depends_on:
       - elasticsearch
+
+
+
+
+
+
+      
