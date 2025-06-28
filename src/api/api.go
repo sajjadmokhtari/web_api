@@ -40,8 +40,12 @@ func InitServer(cfg *config.Config) {
 	{
 		heath := v1.Group("/health")
 		test_router := v1.Group("/test")
+		users := v1.Group("/users")
+
+
 		routers.Health(heath)
 		routers.TestRouter(test_router)
+		routers.User(users, cfg)
 	}
 
 	log.Println("InitServer - API groups registered.")
@@ -53,10 +57,12 @@ func InitServer(cfg *config.Config) {
 }
 
 func RegisterSwagger(r *gin.Engine, cfg *config.Config) {
+	log.Println("[Swagger Setup] RegisterSwagger executed")
+
 	docs.SwaggerInfo.Title = "golang web api"
 	docs.SwaggerInfo.Description = "golang web api"
 	docs.SwaggerInfo.Version = "2.0"
-	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.BasePath = "/api/v1"
 	docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%s", cfg.Server.Port)
 	docs.SwaggerInfo.Schemes = []string{"http"}
 

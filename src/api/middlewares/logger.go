@@ -5,6 +5,7 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
 	"bytes"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,9 +31,12 @@ func DefaultStructuredLogger(cfg *config.Config) gin.HandlerFunc{
 }
 
 func StructuredLogger(logger logging.Logger) gin.HandlerFunc {
-
 	return func(c *gin.Context) {
-		blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
+		if strings.Contains(c.FullPath(), "swagger"){
+			c.Next()
+
+		}else {
+					blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		start := time.Now()
 		path := c.FullPath()
 		raw := c.Request.URL.RawQuery
@@ -69,6 +73,9 @@ func StructuredLogger(logger logging.Logger) gin.HandlerFunc {
 		Keys[logging.ResponseBody] = blw.body.String()
 
 		logger.Info(logging.RequestResponse, logging.Api, "", Keys)
+
+		}
+
 
 	}
 

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"time"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,6 +14,7 @@ var dbClient *gorm.DB
 var logger = logging.NewLogger(config.GetConfig())
 
 func InitDb(cfg *config.Config) error {
+	var err error
 
 	cnn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
@@ -26,7 +26,6 @@ func InitDb(cfg *config.Config) error {
 		cfg.Postgres.SSLMode,
 	)
 
-	var err error
 	dbClient, err = gorm.Open(postgres.Open(cnn), &gorm.Config{})
 	if err != nil {
 		return err
@@ -45,13 +44,13 @@ func InitDb(cfg *config.Config) error {
 	sqlDB.SetMaxOpenConns(cfg.Postgres.MaxOpenConns)
 	sqlDB.SetConnMaxLifetime(cfg.Postgres.ConnMaxLifetime * time.Minute)
 
-	logger.Info(logging.Postgres , logging.Startup , "Db connection established", nil)
+	logger.Info(logging.Postgres, logging.Startup, "Db connection established", nil)
 	return nil
-}
+}//اتصال اولیه 
 
 func GetDb() *gorm.DB {
 	return dbClient
-}
+}//دسترسی به اتصال
 
 func CloseDb() {
 
@@ -61,3 +60,4 @@ func CloseDb() {
 		log.Println("Error closing the database:", err)
 	}
 }
+//بستن اتصال 

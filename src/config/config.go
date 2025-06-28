@@ -15,6 +15,7 @@ type Config struct {
 	Redis    RedisConfig
 	Password PasswordConfig
 	Logger   LoggerConfig
+	Otp      OtpConfig
 }
 
 type ServerConfig struct {
@@ -26,7 +27,7 @@ type LoggerConfig struct {
 	Filepath string
 	Encoding string
 	Level    string
-	Logger string
+	Logger   string
 }
 
 type PostgresConfig struct {
@@ -65,6 +66,12 @@ type PasswordConfig struct {
 	IncludeLowercase bool
 }
 
+type OtpConfig struct {
+	ExpireTime time.Duration
+	Digits     int
+	Limiter    time.Duration
+}
+
 func GetConfig() *Config {
 	cfgPath := getConfigpath(os.Getenv("APP_ENV"))
 	v, err := LoadConfig(cfgPath, "yml")
@@ -100,7 +107,18 @@ func LoadConfig(filename string, fileType string) (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigType(fileType)
 	v.SetConfigName(filename)
+	
+	// Add multiple config paths to handle different working directories
 	v.AddConfigPath(".")
+	v.AddConfigPath("..")
+	v.AddConfigPath("../..")
+	v.AddConfigPath("config")
+	v.AddConfigPath("../config")
+	v.AddConfigPath("../../config")
+	v.AddConfigPath("src/config")
+	v.AddConfigPath("../src/config")
+	
+
 	v.AutomaticEnv()
 
 	err := v.ReadInConfig()
@@ -119,13 +137,11 @@ func LoadConfig(filename string, fileType string) (*viper.Viper, error) {
 
 func getConfigpath(env string) string {
 	if env == "docker" {
-		return "config/config-docker"
+		return "config-docker"
 	} else if env == "production" {
-		return "config/Config-production"
-
+		return "config-production"
 	} else {
-		return "../config/config-development"
-
+		return "config-development"
 	}
 
 } //gereftan file

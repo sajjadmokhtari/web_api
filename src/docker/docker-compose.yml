@@ -20,7 +20,7 @@ services:
         image: dpage/pgadmin4
         container_name: pgadmin_container
         environment:
-            PGADMIN_DEFAULT_EMAIL: sajjad.m1565@gamil.com
+            PGADMIN_DEFAULT_EMAIL: sajjad.m1565@gmail.com
             PGADMIN_DEFAULT_PASSWORD: 123456
         volumes:
             - pgadmin:/var/lib/pgadmin

@@ -1,5 +1,36 @@
 package common
 
+import (
+	"GOLANG_CLEAN_WEB_API/src/config"
+	"math"
+	"math/rand"
+	"strconv"
+	"time"
+)
+
+/*func GeneratesOtp() string {
+	cfg := config.GetConfig()
+	rand.Seed(time.Now().UnixNano())
+
+	min := int(math.Pow(10, float64(cfg.Otp.Digits-1)))
+	max := int(math.Pow(10, float64(cfg.Otp.Digits)) - 1)
+
+	var num = rand.Intn(max-min) + min
+	return strconv.Itoa(num)
+}*/
+func GenerateOtp() string {
+	cfg := config.GetConfig()
+
+	min := int(math.Pow(10, float64(cfg.Otp.Digits-1)))
+	max := int(math.Pow(10, float64(cfg.Otp.Digits)) - 1)
+
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
+
+	num := r.Intn(max-min+1) + min
+	return strconv.Itoa(num)
+}
+
 /*import "GOLANG_CLEAN_WEB_API/src/config"
 
 var (
@@ -57,6 +88,3 @@ func GeneratePassword() string {
 		minUpperCase = 0
 	}
 }*/
-
-
-	

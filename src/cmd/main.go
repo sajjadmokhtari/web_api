@@ -5,16 +5,13 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/cache"
 	"GOLANG_CLEAN_WEB_API/src/config"
 	"GOLANG_CLEAN_WEB_API/src/data/db"
+	"GOLANG_CLEAN_WEB_API/src/data/db/migrations"
 	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
 )
 
 // @securityDefinitions.apikey AuthBearer
 // @in header
 // @name Authorization
-
-
-
-
 
 func main() {
 	cfg := config.GetConfig()
@@ -30,6 +27,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(logging.Postgres, logging.Startup, err.Error(), nil)
 	}
+	migrations.Up_1()
 
 	api.InitServer(cfg)
 
