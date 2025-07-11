@@ -1,6 +1,9 @@
 package helper
 
-import validations "GOLANG_CLEAN_WEB_API/src/api/validations"
+import (
+	validations "GOLANG_CLEAN_WEB_API/src/api/validations"
+	"fmt"
+)
 
 type BaseHttpResponse struct {
 	Result           any                            `json:"result"`
@@ -34,5 +37,14 @@ func GenerateBaseResponseWithValidationError(result any, success bool, resultCod
 		Success:          success,
 		ResultCode:       resultCode,
 		ValidationErrors: validations.GetValidationErrors(err),
+	}
+}
+
+func GenerateBaseResponseWithAnyError(result interface{}, success bool, code int, err any) BaseHttpResponse {
+	return BaseHttpResponse{
+		Result:     result,
+		Success:    success,
+		ResultCode: code,
+		Error:      fmt.Sprintf("%v", err),
 	}
 }

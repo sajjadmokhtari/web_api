@@ -16,6 +16,7 @@ type Config struct {
 	Password PasswordConfig
 	Logger   LoggerConfig
 	Otp      OtpConfig
+	JWT      JwTConfig
 }
 
 type ServerConfig struct {
@@ -72,6 +73,13 @@ type OtpConfig struct {
 	Limiter    time.Duration
 }
 
+type JwTConfig struct {
+	Secret                     string
+	RefreshSecret              string
+	AccessTokenExpireDuration  time.Duration
+	RefreshTokenExpireDuration time.Duration
+}
+
 func GetConfig() *Config {
 	cfgPath := getConfigpath(os.Getenv("APP_ENV"))
 	v, err := LoadConfig(cfgPath, "yml")
@@ -107,7 +115,7 @@ func LoadConfig(filename string, fileType string) (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigType(fileType)
 	v.SetConfigName(filename)
-	
+
 	// Add multiple config paths to handle different working directories
 	v.AddConfigPath(".")
 	v.AddConfigPath("..")
@@ -117,7 +125,6 @@ func LoadConfig(filename string, fileType string) (*viper.Viper, error) {
 	v.AddConfigPath("../../config")
 	v.AddConfigPath("src/config")
 	v.AddConfigPath("../src/config")
-	
 
 	v.AutomaticEnv()
 

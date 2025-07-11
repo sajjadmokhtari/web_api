@@ -1,11 +1,11 @@
 package api
 
 import (
+	"GOLANG_CLEAN_WEB_API/docs"
 	"GOLANG_CLEAN_WEB_API/src/api/middlewares"
 	"GOLANG_CLEAN_WEB_API/src/api/routers"
 	validations "GOLANG_CLEAN_WEB_API/src/api/validations"
 	"GOLANG_CLEAN_WEB_API/src/config"
-	"GOLANG_CLEAN_WEB_API/src/docs"
 	"fmt"
 	"log"
 
@@ -14,17 +14,22 @@ import (
 	"github.com/go-playground/validator/v10"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	//"github.com/swaggo/swag/example/basic/docs"
 )
 
 func InitServer(cfg *config.Config) {
 	r := gin.New()
 
-
 	RegisterSwagger(r, cfg)
 
-	//r.Use(middlewares.Cors(cfg))
 	r.Use(middlewares.DefaultStructuredLogger(cfg))
-	r.Use(gin.Logger(), gin.Recovery(), middlewares.LimitByRequest())
+	r.Use(
+		gin.Logger(),
+		gin.RecoveryWithWriter(gin.DefaultWriter, func(c *gin.Context, err interface{}) {
+			middlewares.ErrorHandler(c, err)//خط بیست و هشت و بیست و نه جدید اضافه شده اند
+		}),
+		middlewares.LimitByRequest(),
+	)
 
 	log.Println("InitServer - Middleware LimitByRequest registered.")
 
@@ -41,18 +46,17 @@ func InitServer(cfg *config.Config) {
 		heath := v1.Group("/health")
 		test_router := v1.Group("/test")
 		users := v1.Group("/users")
-
+		Countries :=v1.Group("/countries",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
 
 		routers.Health(heath)
 		routers.TestRouter(test_router)
 		routers.User(users, cfg)
+		routers.Country(Countries, cfg)
 	}
 
 	log.Println("InitServer - API groups registered.")
-
-	
-
 	log.Println("InitServer - Running server on port:", cfg.Server.Port)
+
 	r.Run(fmt.Sprintf(":%s", cfg.Server.Port))
 }
 

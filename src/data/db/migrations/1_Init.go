@@ -2,7 +2,7 @@ package migrations
 
 import (
 	"GOLANG_CLEAN_WEB_API/src/config"
-	"GOLANG_CLEAN_WEB_API/src/constans"
+	"GOLANG_CLEAN_WEB_API/src/constants"
 	"GOLANG_CLEAN_WEB_API/src/data/db"
 	"GOLANG_CLEAN_WEB_API/src/data/models"
 	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
@@ -46,13 +46,13 @@ func addNewTable(database *gorm.DB, model interface{}, tables []interface{}) []i
 
 }
 func CreateDefaultInformation(database *gorm.DB) {
-	adminRole := models.Role{Name: constans.AdminRoleName}
+	adminRole := models.Role{Name: constants.AdminRoleName}
 	CreateRoleIfNotExists(database, &adminRole)
 
-	defaultRole := models.Role{Name: constans.DefaultRoleName}
+	defaultRole := models.Role{Name: constants.DefaultRoleName}
 	CreateRoleIfNotExists(database, &defaultRole)
 
-	u := models.User{UserName: constans.DefaultUserName, FirstName: "Test", LastName: "Test", MobileNumber: "09911732328", Email: "admin@admin.com"}
+	u := models.User{UserName: constants.DefaultUserName, FirstName: "Test", LastName: "Test", MobileNumber: "09911732328", Email: "admin@admin.com"}
 	pass := "12345678"
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	u.Password = string(hashedPassword)
@@ -78,7 +78,7 @@ func CreateAdminUserIfNotExists(database *gorm.DB, u *models.User, roleId int) {
 	database.
 		Model(&models.User{}).
 		Select("1").
-		Where("username = ?", u.UserName).
+		Where("user_name = ?", u.UserName).
 		First(&exists)
 
 	if exists == 0 {

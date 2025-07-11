@@ -13,4 +13,7 @@ func User(router *gin.RouterGroup, cfg *config.Config) {
 	
 	// Route with OTP rate limiting
 	router.POST("/send-otp", middlewares.OtpLimiter(cfg), h.SendOtp)
+	router.POST("/login-by-username", h.LoginByUsername)
+	router.POST("/register-by-username", h.RegisterByUsername)
+	router.POST("/login-by-mobile", h.RegisterLoginByMobileRequest)
 }

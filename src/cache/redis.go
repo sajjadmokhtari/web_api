@@ -44,6 +44,7 @@ func CloseRedis() {
 }
 
 
+// Set: این تابع مقدار داده‌شده رو به‌صورت جیسون در ردیس ذخیره می‌کنه و زمان انقضای مشخصی براش تعیین می‌کنه.
 
 func Set[T any](c *redis.Client, key string, value T, duration time.Duration) error {
     v, err := json.Marshal(value)
@@ -55,6 +56,7 @@ func Set[T any](c *redis.Client, key string, value T, duration time.Duration) er
 }
 
 
+// Get: این تابع مقدار ذخیره‌شده رو از ردیس دریافت می‌کنه، اون رو از قالب جیسون درمیاره و به ساختار اصلی تبدیل می‌کنه.
 
 func Get[T any](c *redis.Client, key string) (T, error) {
     var dest T = *new(T)
