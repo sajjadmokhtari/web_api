@@ -4,6 +4,7 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/config"
 	"math"
 	"math/rand"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -17,30 +18,26 @@ var (
 	allCharSet     = lowerCharSet + upperCharSet + specialCharSet + numberSet
 )
 
-
 func GenerateOtp() string {
-    // دریافت تنظیمات برنامه شامل تعداد رقم‌های OTP
-    cfg := config.GetConfig()
+	// دریافت تنظیمات برنامه شامل تعداد رقم‌های OTP
+	cfg := config.GetConfig()
 
-    // محاسبه کمترین عدد ممکن با توجه به تعداد رقم‌ها (مثلاً اگر ۶ رقم باشد، min برابر 100000 است)
-    min := int(math.Pow(10, float64(cfg.Otp.Digits-1)))
+	// محاسبه کمترین عدد ممکن با توجه به تعداد رقم‌ها (مثلاً اگر ۶ رقم باشد، min برابر 100000 است)
+	min := int(math.Pow(10, float64(cfg.Otp.Digits-1)))
 
-    // محاسبه بیشترین عدد ممکن (مثلاً اگر ۶ رقم باشد، max برابر 999999 است)
-    max := int(math.Pow(10, float64(cfg.Otp.Digits)) - 1)
+	// محاسبه بیشترین عدد ممکن (مثلاً اگر ۶ رقم باشد، max برابر 999999 است)
+	max := int(math.Pow(10, float64(cfg.Otp.Digits)) - 1)
 
-    // ایجاد منبع تصادفی براساس زمان فعلی برای افزایش تصادفی بودن
-    src := rand.NewSource(time.Now().UnixNano())
-    r := rand.New(src)
+	// ایجاد منبع تصادفی براساس زمان فعلی برای افزایش تصادفی بودن
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
 
-    // تولید عدد تصادفی در بازه [min, max]
-    num := r.Intn(max-min+1) + min
+	// تولید عدد تصادفی در بازه [min, max]
+	num := r.Intn(max-min+1) + min
 
-    // تبدیل عدد تولیدشده به رشته و بازگرداندن آن
-    return strconv.Itoa(num)
+	// تبدیل عدد تولیدشده به رشته و بازگرداندن آن
+	return strconv.Itoa(num)
 }
-
-
-
 
 func GeneratePassword() string {
 	var password strings.Builder
@@ -105,3 +102,10 @@ func CheckPassword(password string) bool {
 	return true
 
 }*/
+
+func ToSnakeCase(str string) string {
+	str = regexp.MustCompile("(.)([A-Z][a-z]+)").ReplaceAllString(str, "${1}_${2}")
+	str = regexp.MustCompile("([a-z0-9])([A-Z])").ReplaceAllString(str, "${1}_${2}")
+	return strings.ToLower(str)
+}
+//  این با یکی ویدو فرق میکنه 

@@ -82,6 +82,9 @@ func (s *OtpService) ValidateOtp(MobileNumber string, otp string) error {
 		// اگر اوتیپی درست باشد و هنوز استفاده نشده، آن را به عنوان استفاده‌شده علامت‌گذاری کرده و مجدد ذخیره می‌کند
 		res.Used = true
 		err = cache.Set(s.redisClient, key, res, s.cfg.Otp.ExpireTime*time.Second)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

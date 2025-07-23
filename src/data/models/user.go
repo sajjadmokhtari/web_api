@@ -18,8 +18,8 @@ type UserRole struct {
 	UserId int
 	RoleId int
 
-	User User `gorm:"foreignKey:UserId;references:Id"` //تغییر داده شد درست شود
-	Role Role `gorm:"foreignKey:RoleId;references:Id"` //تغییر داده شد  درست شود
+	User User `gorm:"foreignKey:UserId;constraint:OnUpdate:No ACTION:OnDelete:NO ACTION"` 
+	Role Role `gorm:"foreignKey:RoleId;constraint:OnUpdate:No ACTION:OnDelete:NO ACTION"`
 }
 type Role struct {
 	BaseModel

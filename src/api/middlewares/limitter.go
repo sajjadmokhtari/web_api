@@ -18,7 +18,7 @@ func LimitByRequest() gin.HandlerFunc {
 		if err != nil {
 			log.Println("Rate limit triggered:", err)
 			c.AbortWithStatusJSON(http.StatusTooManyRequests,
-				helper.GenerateBaseResponseWithError(nil, false, -100, err))
+				helper.GenerateBaseResponseWithError(nil, false, helper.LimiterError, err))
 			return
 		}
 

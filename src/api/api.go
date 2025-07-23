@@ -42,16 +42,29 @@ func InitServer(cfg *config.Config) {
 
 	api := r.Group("/api")
 	v1 := api.Group("/v1")
-	{
+	{   //Test
 		heath := v1.Group("/health")
 		test_router := v1.Group("/test")
-		users := v1.Group("/users")
-		Countries :=v1.Group("/countries",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
 
+
+        //User
+		users := v1.Group("/users")
+
+		
+		//Base
+		Countries :=v1.Group("/countries",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		Cities :=v1.Group("/Cities",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		files :=v1.Group("/files",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+
+        //Test
 		routers.Health(heath)
 		routers.TestRouter(test_router)
+        //User
 		routers.User(users, cfg)
+        //Base
 		routers.Country(Countries, cfg)
+		routers.City(Cities , cfg)
+		routers.File(files,cfg)
 	}
 
 	log.Println("InitServer - API groups registered.")

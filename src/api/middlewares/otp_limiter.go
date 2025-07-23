@@ -18,7 +18,7 @@ func OtpLimiter(cfg *config.Config) gin.HandlerFunc {
 		limiter := limiter.GetLimiter(c.Request.RemoteAddr)
 		if !limiter.Allow() {
 			rateLimitError := errors.New("too many OTP requests, please try again later")//توی ویدو نبود خودم زدم
-			c.AbortWithStatusJSON(http.StatusTooManyRequests, helper.GenerateBaseResponseWithError(nil, false, -1, rateLimitError))
+			c.AbortWithStatusJSON(http.StatusTooManyRequests, helper.GenerateBaseResponseWithError(nil, false, helper.OtpLimiterError, rateLimitError))
 			c.Abort()
 
 		} else {

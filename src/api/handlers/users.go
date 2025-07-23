@@ -5,7 +5,6 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/api/helper"
 	"GOLANG_CLEAN_WEB_API/src/config"
 	"GOLANG_CLEAN_WEB_API/src/services"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,20 +35,20 @@ func (h *UsersHandler) LoginByUsername(c *gin.Context) {
 	req := new(dto.LoginByUsernameRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, -1, err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, helper.ValidationError, err))
 		return
 	}
 	token, err := h.service.LoginByUsername(req)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			helper.TranslateErrorStatusCode(err),
-			helper.GenerateBaseResponseWithError(nil, false, -1, err),
+			helper.GenerateBaseResponseWithError(nil, false, helper.InternalError, err),
 		)
 		return
 
 	}
 	// call internal sms.service
-	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(token, true, 0))
+	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(token, true, helper.ValidationError))
 
 }
 
@@ -69,20 +68,20 @@ func (h *UsersHandler) RegisterByUsername(c *gin.Context) {
 	req := new(dto.RegisterUserByUsernameRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, -1, err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, helper.ValidationError, err))
 		return
 	}
 	err = h.service.RegisterByUsername(req)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			helper.TranslateErrorStatusCode(err),
-			helper.GenerateBaseResponseWithError(nil, false, -1, err),
+			helper.GenerateBaseResponseWithError(nil, false, helper.InternalError, err),
 		)
 		return
 
 	}
 	// call internal sms.service
-	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(nil, true, 0))
+	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(nil, true, helper.Success))
 
 }
 
@@ -98,29 +97,26 @@ func (h *UsersHandler) RegisterByUsername(c *gin.Context) {
 // @Failure 409 {object} helper.BaseHttpResponse "Failed"
 // @Router /users/login-by-mobile [post]
 func (h *UsersHandler) RegisterLoginByMobileRequest(c *gin.Context) {
-	fmt.Println("[Start] هندل LoginByMobileRequest دریافت شد")
 
 	req := new(dto.RegisterLoginByMobileRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		fmt.Println("[Error] BindJSON شکست خورد:", err)
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, -1, err))
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, helper.ValidationError, err))
 		return
 	}
-	fmt.Printf("[Bind] mobile=%s, otp=%s\n", req.MobileNumber, req.Otp)
 
 	token, err := h.service.RegisterLoginByMobileRequest(req)
 	if err != nil {
-		fmt.Println("[Error] RegisterLoginByMobileRequest شکست خورد:", err)
+
 		c.AbortWithStatusJSON(
 			helper.TranslateErrorStatusCode(err),
-			helper.GenerateBaseResponseWithError(nil, false, -1, err),
+			helper.GenerateBaseResponseWithError(nil, false, helper.InternalError, err),
 		)
 		return
 	}
 
-	fmt.Println("[Success] توکن تولید شد:", token)
-	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(token, true, 0))
+	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(token, true, helper.Success))
 }
 
 // SendOtp godoc
@@ -138,19 +134,19 @@ func (h *UsersHandler) SendOtp(c *gin.Context) {
 	req := new(dto.GetOtpRequest)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false, -1, err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateBaseResponseWithValidationError(nil, false,helper.ValidationError, err))
 		return
 	}
 	err = h.service.SendOtp(req)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			helper.TranslateErrorStatusCode(err),
-			helper.GenerateBaseResponseWithError(nil, false, -1, err),
+			helper.GenerateBaseResponseWithError(nil, false,helper.InternalError, err),
 		)
 		return
 
 	}
 	// call internal sms.service
-	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(nil, true, 0))
+	c.JSON(http.StatusCreated, helper.GenerateBaseResponse(nil, true, helper.Success))
 } // SendOtp: این هندلر یک کد تِک‌اُتی‌پی برای کاربر تولید می‌کنه، اعتبار درخواست رو بررسی می‌کنه،
 // و بعد از موفقیت، پاسخ مناسبی برمی‌گردونه. در صورت خطا، وضعیت مناسب با پیام خطا ارسال می‌شه.

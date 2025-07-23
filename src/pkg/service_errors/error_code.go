@@ -18,6 +18,7 @@ const(
 
 	EmailExists = "Email exists"
 	UsernameExists = "UsernameExists"
+	PermissionDenied = "Permission Denied"
 	
 	//Db
 

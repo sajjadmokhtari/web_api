@@ -5,7 +5,8 @@ type SubCategory string
 type ExtraKey string
 
 const (
-	General         Category = "General"
+	General Category = "General"
+	Io      Category = "io"
 	Internal        Category = "Internal"
 	Postgres        Category = "Postgres"
 	Redis           Category = "Redis"
@@ -31,6 +32,8 @@ const (
 	MobileValidation  SubCategory = "MobileValidation"
 	CustomValidation  SubCategory = "CustomValidation"
 	PasswordValidator SubCategory = "PasswordValidator"
+	//Io
+	RemoveFile SubCategory="RemoveFile"
 )
 const (
 	AppName      ExtraKey = "AppName"

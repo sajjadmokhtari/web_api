@@ -141,8 +141,8 @@ func (h *TestHandler) BodyBinder(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helper.GenerateBaseResponse(gin.H{
 			"validation error": err.Error(),
-		}, false, -1))
-		return
+		}, false, helper.ValidationError))
+		return 
 	}
 	c.JSON(http.StatusOK, helper.GenerateBaseResponse(gin.H{
 		"result": "BodyBinder",
@@ -164,7 +164,7 @@ func (h *TestHandler) FileBinder(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helper.GenerateBaseResponse(gin.H{
 			"error": err.Error(),
-		}, false, -1))
+		}, false, helper.ValidationError))
 		return
 	}
 	err = c.SaveUploadedFile(file, "file")
