@@ -7,6 +7,7 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/data/models"
 	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
 	"fmt"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -20,38 +21,47 @@ func Up_1() {
 	CreateDefaultUserInformation(database)
 	CreateCountry(database)
 	CreatePropertyCategory(database)
+	CreateCarType(database)
+	CreateGearbox(database)
+	CreateColor(database)
+	CreateYear(database)
 }
 
 func CreateTables(database *gorm.DB) {
 	tables := []interface{}{}
 
 	// SYSTEM
-	tables = addNewTable(database, models.Country{}, tables)
-	tables = addNewTable(database, models.City{}, tables)
-	tables = addNewTable(database, models.PersianYear{}, tables)
-	tables = addNewTable(database, models.Color{}, tables)
 	tables = addNewTable(database, models.File{}, tables)
+	tables = addNewTable(database, models.Color{}, tables)
+	tables = addNewTable(database, models.PersianYear{}, tables)
+	tables = addNewTable(database, models.Country{}, tables)
 
 	// USER
-	tables = addNewTable(database, models.User{}, tables)
 	tables = addNewTable(database, models.Role{}, tables)
-	tables = addNewTable(database, models.UserRole{}, tables)
+	tables = addNewTable(database, models.User{}, tables)
 
-	// CAR
+	// PROPERTY
+	tables = addNewTable(database, models.PropertyCategory{}, tables)
+
+	// CAR پایه
 	tables = addNewTable(database, models.Gearbox{}, tables)
 	tables = addNewTable(database, models.CarType{}, tables)
-	tables = addNewTable(database, models.Company{}, tables)
-	tables = addNewTable(database, models.CarModel{}, tables)
-	tables = addNewTable(database, models.CarModelColor{}, tables)
-	tables = addNewTable(database, models.CarModelYear{}, tables)
-	tables = addNewTable(database, models.CarModelImage{}, tables)
-	tables = addNewTable(database, models.CarModelPriceHistory{}, tables)
-	tables = addNewTable(database, models.CarModelComment{}, tables)
 
-	// PROPERTY (اصلاح ترتیب)
-	tables = addNewTable(database, models.PropertyCategory{}, tables)
-	tables = addNewTable(database, models.Property{}, tables)
-	tables = addNewTable(database, models.CarModelProperty{}, tables)
+	// وابسته‌ها پایه
+	tables = addNewTable(database, models.City{}, tables)     // وابسته به Country
+	tables = addNewTable(database, models.Company{}, tables)  // وابسته به Country
+	tables = addNewTable(database, models.Property{}, tables) // وابسته به PropertyCategory
+	tables = addNewTable(database, models.UserRole{}, tables) // وابسته به Role و User
+
+	// CAR وابسته
+	tables = addNewTable(database, models.CarModel{}, tables) // وابسته به Company و CarType و Gearbox
+	tables = addNewTable(database, models.CarModelYear{}, tables)
+	tables = addNewTable(database, models.CarModelPriceHistory{}, tables)
+
+	tables = addNewTable(database, models.CarModelColor{}, tables)    // وابسته به CarModel و Color
+	tables = addNewTable(database, models.CarModelImage{}, tables)    // وابسته به CarModel و File
+	tables = addNewTable(database, models.CarModelComment{}, tables)  // وابسته به CarModel و User
+	tables = addNewTable(database, models.CarModelProperty{}, tables) // وابسته به CarModel و Property
 
 	err := database.Migrator().CreateTable(tables...)
 	if err != nil {
@@ -124,36 +134,65 @@ func CreateCountry(database *gorm.DB) {
 			{Name: "Shiraz"},
 			{Name: "Chalus"},
 			{Name: "Ahvaz"},
+		}, Companies: []models.Company{
+			{Name: "Saipa"},
+			{Name: "Iran Khodro"},
 		}})
 
 		database.Create(&models.Country{Name: "USA", Cities: []models.City{
 			{Name: "New York"},
 			{Name: "Washington"},
+			{Name: "San Francisco"},
+		}, Companies: []models.Company{
+			{Name: "Tesla"},
+			{Name: "Jeep"},
 		}})
 
 		database.Create(&models.Country{Name: "Germany", Cities: []models.City{
 			{Name: "Berlin"},
 			{Name: "Munich"},
+			{Name: "Frankfurt"},
+		}, Companies: []models.Company{
+			{Name: "Mercedes-Benz"},
+			{Name: "Opel"},
+			{Name: "BMW"},
 		}})
 
 		database.Create(&models.Country{Name: "Japan", Cities: []models.City{
 			{Name: "Tokyo"},
 			{Name: "Kyoto"},
+			{Name: "Osaka"},
+		}, Companies: []models.Company{
+			{Name: "Honda"},
+			{Name: "Toyota"},
 		}})
 
 		database.Create(&models.Country{Name: "France", Cities: []models.City{
 			{Name: "Paris"},
 			{Name: "Lyon"},
+			{Name: "Marseille"},
+		}, Companies: []models.Company{
+			{Name: "Renault"},
+			{Name: "Peugeot"},
 		}})
 
 		database.Create(&models.Country{Name: "Italy", Cities: []models.City{
 			{Name: "Rome"},
 			{Name: "Milan"},
+			{Name: "Naples"},
+		}, Companies: []models.Company{
+			{Name: "Ferrari"},
+			{Name: "Lamborghini"},
 		}})
 
 		database.Create(&models.Country{Name: "South Korea", Cities: []models.City{
 			{Name: "Seoul"},
 			{Name: "Busan"},
+			{Name: "Incheon"},
+		}, Companies: []models.Company{
+			{Name: "Samsung"},
+			{Name: "Hyundai"},
+			{Name: "Kia"},
 		}})
 
 	} else {
@@ -244,6 +283,87 @@ func CreateProperty(database *gorm.DB, cat string) {
 	}
 
 	database.Create(&props)
+}
+
+func CreateCarType(database *gorm.DB) {
+	count := 0
+	database.
+		Model(&models.CarType{}).
+		Select("count(*)").
+		Find(&count)
+	if count == 0 {
+		database.Create(&models.CarType{Name: "Crossover"})
+		database.Create(&models.CarType{Name: "Sedan"})
+		database.Create(&models.CarType{Name: "Sports"})
+		database.Create(&models.CarType{Name: "Coups"})
+		database.Create(&models.CarType{Name: "Hatchback"})
+	}
+}
+
+func CreateGearbox(database *gorm.DB) {
+	count := 0
+	database.
+		Model(&models.Gearbox{}).
+		Select("count(*)").
+		Find(&count)
+	if count == 0 {
+		database.Create(&models.Gearbox{Name: "Manual"})
+		database.Create(&models.Gearbox{Name: "Automatic"})
+
+	}
+}
+
+func CreateColor(database *gorm.DB) {
+	count := 0
+	database.
+		Model(&models.Color{}).
+		Select("count(*)").
+		Find(&count)
+	if count == 0 {
+		database.Create(&models.Color{Name: "Black", HexCode: "#000000"})
+		database.Create(&models.Color{Name: "White", HexCode: "#ffffff"})
+
+	}
+}
+
+func CreateYear(database *gorm.DB) {
+	count := 0
+	database.
+		Model(&models.PersianYear{}).
+		Select("count(*)").
+		Find(&count)
+	if count == 0 {
+		database.Create(&models.PersianYear{
+			PersianTitle: "1402",
+			Year:         1402,
+			StartAt:      time.Date(2023, time.Month(3), 21, 0, 0, 0, 0, time.UTC),
+			EndAt:        time.Date(2024, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+		})
+		database.Create(&models.PersianYear{
+			PersianTitle: "1401",
+			Year:         1401,
+			StartAt:      time.Date(2022, time.Month(3), 21, 0, 0, 0, 0, time.UTC),
+			EndAt:        time.Date(2023, time.Month(3), 21, 0, 0, 0, 0, time.UTC),
+		})
+		database.Create(&models.PersianYear{
+			PersianTitle: "1400",
+			Year:         1400,
+			StartAt:      time.Date(2021, time.Month(3), 21, 0, 0, 0, 0, time.UTC),
+			EndAt:        time.Date(2022, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+		})
+		database.Create(&models.PersianYear{
+			PersianTitle: "1399",
+			Year:         1399,
+			StartAt:      time.Date(2020, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+			EndAt:        time.Date(2021, time.Month(3), 20, 0, 0, 0, 0, time.UTC),
+		})
+		database.Create(&models.PersianYear{
+			PersianTitle: "1398",
+			Year:         1398,
+			StartAt:      time.Date(2019, time.Month(3), 21, 0, 0, 0, 0, time.UTC),
+			EndAt:        time.Date(2020, time.Month(3), 19, 0, 0, 0, 0, time.UTC),
+		})
+	}
 }
 
 func Down_1() {

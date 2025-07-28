@@ -55,16 +55,49 @@ func InitServer(cfg *config.Config) {
 		Countries :=v1.Group("/countries",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
 		Cities :=v1.Group("/Cities",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
 		files :=v1.Group("/files",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		companies := v1.Group("/companies",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		colors := v1.Group("/colors",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        Years := v1.Group("/years",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
 
+
+        //property
+		properties :=v1.Group("/properties",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		propertyCategories :=v1.Group("/property-categories",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        //Car
+		carTypes := v1.Group("/car-types",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+		gearboxes := v1.Group("/gearboxes",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        carModels := v1.Group("/car-models",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        carModelColors := v1.Group("/car-model-colors",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        carModelYears := v1.Group("/car-model-years",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
         //Test
 		routers.Health(heath)
 		routers.TestRouter(test_router)
+
+
         //User
 		routers.User(users, cfg)
+
+
         //Base
 		routers.Country(Countries, cfg)
 		routers.City(Cities , cfg)
 		routers.File(files,cfg)
+		routers.Company(companies,cfg)
+		routers.Color(colors,cfg)
+		routers.Year(Years,cfg)
+
+
+		//property
+		routers.Property(properties,cfg)
+		routers.PropertyCategory(propertyCategories,cfg)
+
+		//Car
+		routers.CarType(carTypes,cfg)
+		routers.Gearbox(gearboxes,cfg)
+		routers.CarModel(carModels,cfg)
+		routers.CarModelColor(carModelColors,cfg)
+		routers.CarModelYear(carModelYears,cfg)
+
 	}
 
 	log.Println("InitServer - API groups registered.")

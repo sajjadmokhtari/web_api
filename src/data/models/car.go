@@ -23,18 +23,18 @@ type Company struct {
 
 type CarModel struct {
 	BaseModel
-	Name               string `gorm:"size:15;not null;unique"`
-	CompanyId          int
-	Company            Company `gorm:"foreignKey:CompanyId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	CarTypeId          int
-	CarType            CarType `gorm:"foreignKey:CarTypeId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"` // 🔧 قبلاً اشتباه بود: CarType → CarTypeId
-	GearboxId          int
-	Gearbox            Gearbox `gorm:"foreignKey:GearboxId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	CarModelColors     []CarModelColor
-	CarModelYears      []CarModelYear
-	CarModelProperties []CarModelProperty
-	CarModelImages     []CarModelImage
-	CarModelComments   []CarModelComment
+	Name               string             `gorm:"size:15;not null;unique" json:"name"`
+	CompanyId          int                `json:"companyId"`
+	Company            Company            `gorm:"foreignKey:CompanyId" json:"company"`
+	CarTypeId          int                `json:"carTypeId"`
+	CarType            CarType            `gorm:"foreignKey:CarTypeId" json:"carType"`
+	GearboxId          int                `json:"gearboxId"`
+	Gearbox            Gearbox            `gorm:"foreignKey:GearboxId" json:"gearbox"`
+	CarModelColors     []CarModelColor    `gorm:"foreignKey:CarModelId" json:"carModelColors"`
+	CarModelYears      []CarModelYear     `gorm:"foreignKey:CarModelId" json:"carModelYears"`
+	CarModelProperties []CarModelProperty `gorm:"foreignKey:CarModelId" json:"carModelProperties"`
+	CarModelImages     []CarModelImage    `gorm:"foreignKey:CarModelId" json:"carModelImages"`
+	CarModelComments   []CarModelComment  `gorm:"foreignKey:CarModelId" json:"carModelComments"`
 }
 
 type CarModelColor struct {
@@ -47,19 +47,19 @@ type CarModelColor struct {
 
 type CarModelYear struct {
 	BaseModel
-	CarModel             CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	CarModelId           int
-	PersianYear          PersianYear `gorm:"foreignKey:PersianYearId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	CarModel             CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	PersianYearId        int
+	PersianYear          PersianYear `gorm:"foreignKey:PersianYearId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	CarModelPriceHistory []CarModelPriceHistory
 }
 
 type CarModelImage struct {
 	BaseModel
-	CarModel    CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	CarModelId  int
-	Image       File `gorm:"foreignKey:ImageId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	CarModel    CarModel `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	ImageId     int
+	Image       File `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	IsMainImage bool `gorm:"not null"`
 }
 

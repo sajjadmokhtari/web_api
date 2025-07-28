@@ -33,6 +33,7 @@ type BaseService[T any, Tc any, Tu any, Tr any] struct {
 func NewBaseService[T any, Tc any, Tu any, Tr any](cfg *config.Config) *BaseService[T, Tc, Tu, Tr] {
 	return &BaseService[T, Tc, Tu, Tr]{
 		Database: db.GetDb(),
+		
 		Logger:   logging.NewLogger(cfg),
 		Preload:  []preload{{string: "Cities"}}, // این نیود تو ویدو  خودم اضافه کردم فکر کنم  الکیه
 	}

@@ -1,15 +1,19 @@
 package dto
 
-import "mime/multipart"
+import (
+	"mime/multipart"
+	"time"
+)
 
 type CreateUpdateCountryRequest struct {
 	Name string `json:"name" binding:"required,alpha,min=3,max=20"`
 }
 
 type CountryResponse struct {
-	Id     int            `json:"id"`
-	Name   string         `json:"name"`
-	Cities []CityResponse `json:"cities,omitempty"`
+	Id        int               `json:"id"`
+	Name      string            `json:"name"`
+	Cities    []CityResponse    `json:"cities,omitempty"`
+	Companies []CompanyResponse `json:"companies,omitempty"`
 }
 
 type CreateUpdateCityRequest struct {
@@ -17,7 +21,7 @@ type CreateUpdateCityRequest struct {
 	CountryId int    `json:"countryId,omitempty"`
 }
 type CityResponse struct {
-	Id      int             `json:"Id"`
+	Id      int             `json:"id"`
 	Name    string          `json:"name"`
 	Country CountryResponse `json:"country"`
 }
@@ -49,3 +53,76 @@ type FileResponse struct {
 	Description string `json:"description"`
 	MimeType    string `json:"mimeType"`
 }
+
+type CreateCompanyRequest struct {
+	Name      string `json:"name,omitempty" binding:"alpha,min=3,max=20"`
+	CountryId int    `json:"countryId" binding:"required"`
+}
+
+type UpdateCompanyRequest struct {
+	Name      string `json:"name,omitempty" binding:"alpha,min=3,max=20"`
+	CountryId int    `json:"countryId,omitempty"`
+}
+type CompanyResponse struct {
+	Id      int             `json:"id"`
+	Name    string          `json:"name"`
+	Country CountryResponse `json:"country,omitempty"`
+}
+
+type CreateColorRequest struct {
+	Name    string `json:"name" binding:"alpha,min=3,max=15"`
+	HexCode string `json:"hexCode" binding:"min=7,max=7"`
+}
+
+type UpdateColorRequest struct {
+	Name    string `json:"name,omitempty" binding:"alpha,min=3,max=15"`
+	HexCode string `json:"hexCode,omitempty" binding:"min=7,max=7"`
+}
+type ColorResponse struct {
+	Id      int    `json:"id"`
+	Name    string `json:"name,omitempty"`
+	HexCode string `json:"hexCode,omitempty"`
+}
+
+type CreateCarModelColorRequest struct {
+	CarModelId int `json:"carModelId" binding:"required"`
+	ColorId    int `json:"colorId" binding:"required"`
+}
+
+type UpdateCarModelColorRequest struct {
+	CarModelId int `json:"carModelId,omitempty"`
+	ColorId    int `json:"colorId,omitempty"`
+}
+
+type CarModelColorResponse struct {
+	Id    int           `json:"id"`
+	Color ColorResponse `json:"color,omitempty"`
+}
+
+type CreateYearRequest struct {
+	PersianTitle string    `json:"persianTitle" binding:"min=4,max=4"`
+	Year         int       `json:"year"`
+	StartAt      time.Time `json:"startAt"`
+	EndAt        time.Time `json:"endAt"`
+}
+type UpdatePersianYearRequest struct {
+	PersianTitle string    `json:"persianTitle,omitempty" binding:"min=4,max=4"`
+	Year         int       `json:"year,omitempty"`
+	StartAt      time.Time `json:"startAt,omitempty"`
+	EndAt        time.Time `json:"endAt,omitempty"`
+}
+type PersianYearResponse struct {
+	Id           int       `json:"id"`
+	PersianTitle string    `json:"persianTitle,omitempty"`
+	Year         int       `json:"year,omitempty"`
+	StartAt      time.Time `json:"startAt,omitempty"`
+	EndAt        time.Time `json:"endAt,omitempty"`
+}
+type PersianYearWithoutDateResponse struct {
+	Id           int       `json:"id"`
+	PersianTitle string    `json:"persianTitle,omitempty"`
+	Year         int       `json:"year,omitempty"`
+
+}
+
+

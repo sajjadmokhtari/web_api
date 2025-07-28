@@ -18,7 +18,7 @@ func NewCountryService(cfg *config.Config) *CountryService {
         base: &BaseService[models.Country, dto.CreateUpdateCountryRequest, dto.CreateUpdateCountryRequest, dto.CountryResponse]{
             Database: db.GetDb(),
             Logger:   logging.NewLogger(cfg),
-            Preload:  []preload{{string: "Cities"}}, // ✨ این خط کلید حل مشکله
+            Preload:  []preload{{string: "Cities"},{string: "Companies"}}, // ✨ این خط کلید حل مشکله
         },
     }
 }

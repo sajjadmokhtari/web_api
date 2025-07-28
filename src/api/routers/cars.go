@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func City(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewCityHandler(cfg)
+func CarType(r *gin.RouterGroup, cfg *config.Config) {
+	h := handlers.NewCarTypeHandler(cfg)
 
 	r.POST("/", h.Create)
 	r.PUT("/:id", h.Update)
@@ -17,18 +17,8 @@ func City(r *gin.RouterGroup, cfg *config.Config) {
 	r.POST("/get-by-filter", h.GetByFilter)
 }
 
-func Country(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewCountryHandler(cfg)
-
-	r.POST("/", h.Create)
-	r.PUT("/:id", h.Update)
-	r.DELETE("/:id", h.Delete)
-	r.GET("/:id", h.GetById)
-	r.POST("/get-by-filter", h.GetByFilter)
-}
-
-func File(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewFileHandler(cfg)
+func Gearbox(r *gin.RouterGroup, cfg *config.Config) {
+	h := handlers.NewGearboxHandler(cfg)
 
 	r.POST("/", h.Create)
 	r.PUT("/:id", h.Update)
@@ -40,8 +30,8 @@ func File(r *gin.RouterGroup, cfg *config.Config) {
 
 
 
-func Company(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewCompanyHandler(cfg)
+func CarModel(r *gin.RouterGroup, cfg *config.Config) {
+	h := handlers.NewCarModelHandler(cfg)
 
 	r.POST("/", h.Create)
 	r.PUT("/:id", h.Update)
@@ -51,8 +41,10 @@ func Company(r *gin.RouterGroup, cfg *config.Config) {
 }
 
 
-func Color(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewColorHandler(cfg)
+
+
+func CarModelColor(r *gin.RouterGroup, cfg *config.Config) {
+	h := handlers.NewCarModelColorHandler(cfg)
 
 	r.POST("/", h.Create)
 	r.PUT("/:id", h.Update)
@@ -62,8 +54,9 @@ func Color(r *gin.RouterGroup, cfg *config.Config) {
 }
 
 
-func Year(r *gin.RouterGroup, cfg *config.Config) {
-	h := handlers.NewPersianYearHandler(cfg)
+
+func CarModelYear(r *gin.RouterGroup, cfg *config.Config) {
+	h := handlers.NewCarModelYearHandler(cfg)
 
 	r.POST("/", h.Create)
 	r.PUT("/:id", h.Update)
@@ -71,3 +64,4 @@ func Year(r *gin.RouterGroup, cfg *config.Config) {
 	r.GET("/:id", h.GetById)
 	r.POST("/get-by-filter", h.GetByFilter)
 }
+

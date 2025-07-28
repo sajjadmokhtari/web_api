@@ -1,10 +1,72 @@
 definitions:
+  dto.CarModelColorResponse:
+    properties:
+      color:
+        $ref: '#/definitions/dto.ColorResponse'
+      id:
+        type: integer
+    type: object
+  dto.CarModelResponse:
+    properties:
+      carModelColors:
+        items:
+          $ref: '#/definitions/dto.CarModelColorResponse'
+        type: array
+      carModelYears:
+        items:
+          $ref: '#/definitions/dto.CarModelYearResponse'
+        type: array
+      carType:
+        $ref: '#/definitions/dto.CarTypeResponse'
+      company:
+        $ref: '#/definitions/dto.CompanyResponse'
+      gearbox:
+        $ref: '#/definitions/dto.GearboxResponse'
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.CarModelYearResponse:
+    properties:
+      carModelId:
+        type: integer
+      id:
+        type: integer
+      persianYear:
+        $ref: '#/definitions/dto.PersianYearWithoutDateResponse'
+    type: object
+  dto.CarTypeResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   dto.CityResponse:
     properties:
-      Id:
-        type: integer
       country:
         $ref: '#/definitions/dto.CountryResponse'
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.ColorResponse:
+    properties:
+      hexCode:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.CompanyResponse:
+    properties:
+      country:
+        $ref: '#/definitions/dto.CountryResponse'
+      id:
+        type: integer
       name:
         type: string
     type: object
@@ -14,10 +76,109 @@ definitions:
         items:
           $ref: '#/definitions/dto.CityResponse'
         type: array
+      companies:
+        items:
+          $ref: '#/definitions/dto.CompanyResponse'
+        type: array
       id:
         type: integer
       name:
         type: string
+    type: object
+  dto.CreateCarModelRequest:
+    properties:
+      carTypeId:
+        type: integer
+      companyId:
+        type: integer
+      gearboxId:
+        type: integer
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - carTypeId
+    - companyId
+    - gearboxId
+    - name
+    type: object
+  dto.CreateCarModelYearRequest:
+    properties:
+      carModelId:
+        type: integer
+      persianYearId:
+        type: integer
+    required:
+    - carModelId
+    - persianYearId
+    type: object
+  dto.CreateCarTypeRequest:
+    properties:
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreateCompanyRequest:
+    properties:
+      countryId:
+        type: integer
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - countryId
+    type: object
+  dto.CreateGearboxTypeRequest:
+    properties:
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreatePropertyCategoryRequest:
+    properties:
+      icon:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreatePropertyRequest:
+    properties:
+      categoryId:
+        type: integer
+      dataType:
+        maxLength: 15
+        type: string
+      description:
+        maxLength: 1000
+        type: string
+      icon:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      name:
+        maxLength: 60
+        minLength: 3
+        type: string
+      unit:
+        maxLength: 15
+        type: string
+    required:
+    - categoryId
+    - name
     type: object
   dto.CreateUpdateCityRequest:
     properties:
@@ -38,6 +199,19 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  dto.CreateYearRequest:
+    properties:
+      endAt:
+        type: string
+      persianTitle:
+        maxLength: 4
+        minLength: 4
+        type: string
+      startAt:
+        type: string
+      year:
+        type: integer
     type: object
   dto.FileResponse:
     properties:
@@ -61,6 +235,13 @@ definitions:
       to:
         type: string
       type:
+        type: string
+    type: object
+  dto.GearboxResponse:
+    properties:
+      id:
+        type: integer
+      name:
         type: string
     type: object
   dto.GetOtpRequest:
@@ -99,6 +280,58 @@ definitions:
         items:
           $ref: '#/definitions/dto.Sort'
         type: array
+    type: object
+  dto.PersianYearResponse:
+    properties:
+      endAt:
+        type: string
+      id:
+        type: integer
+      persianTitle:
+        type: string
+      startAt:
+        type: string
+      year:
+        type: integer
+    type: object
+  dto.PersianYearWithoutDateResponse:
+    properties:
+      id:
+        type: integer
+      persianTitle:
+        type: string
+      year:
+        type: integer
+    type: object
+  dto.PropertyCategoryResponse:
+    properties:
+      icon:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      properties:
+        items:
+          $ref: '#/definitions/dto.PropertyResponse'
+        type: array
+    type: object
+  dto.PropertyResponse:
+    properties:
+      category:
+        $ref: '#/definitions/dto.PropertyCategoryResponse'
+      dataType:
+        type: string
+      description:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      unit:
+        type: string
     type: object
   dto.RegisterLoginByMobileRequest:
     properties:
@@ -144,9 +377,111 @@ definitions:
       sort:
         type: string
     type: object
+  dto.UpdateCarModelColorRequest:
+    properties:
+      carModelId:
+        type: integer
+      colorId:
+        type: integer
+    type: object
+  dto.UpdateCarModelRequest:
+    properties:
+      carTypeId:
+        type: integer
+      companyId:
+        type: integer
+      gearboxId:
+        type: integer
+      name:
+        type: string
+    type: object
+  dto.UpdateCarModelYearRequest:
+    properties:
+      carModelId:
+        type: integer
+      persianYearId:
+        type: integer
+    type: object
+  dto.UpdateCarTypeRequest:
+    properties:
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.UpdateColorRequest:
+    properties:
+      hexCode:
+        maxLength: 7
+        minLength: 7
+        type: string
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    type: object
+  dto.UpdateCompanyRequest:
+    properties:
+      countryId:
+        type: integer
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+    type: object
   dto.UpdateFileRequest:
     properties:
       description:
+        type: string
+    type: object
+  dto.UpdateGearboxRequest:
+    properties:
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.UpdatePersianYearRequest:
+    properties:
+      endAt:
+        type: string
+      persianTitle:
+        maxLength: 4
+        minLength: 4
+        type: string
+      startAt:
+        type: string
+      year:
+        type: integer
+    type: object
+  dto.UpdatePropertyCategoryRequest:
+    properties:
+      icon:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.UpdatePropertyRequest:
+    properties:
+      categoryId:
+        type: integer
+      dataType:
+        maxLength: 15
+        type: string
+      description:
+        maxLength: 1000
+        type: string
+      icon:
+        maxLength: 1000
+        type: string
+      name:
+        type: string
+      unit:
+        maxLength: 15
         type: string
     type: object
   handlers.personData:
@@ -358,6 +693,852 @@ paths:
       summary: Filter Countries by pagination & criteria
       tags:
       - Cities
+  /car-model-colors/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelColor
+      parameters:
+      - description: Create a CarModelColor
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelColorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelColor response
+          schema:
+            $ref: '#/definitions/dto.CarModelColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelColor
+      tags:
+      - CarModelColors
+  /car-model-colors/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelColor
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelColor
+      tags:
+      - CarModelColors
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelColor
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelColor response
+          schema:
+            $ref: '#/definitions/dto.CarModelColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelColor
+      tags:
+      - CarModelColors
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelColor
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelColor
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelColorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelColor response
+          schema:
+            $ref: '#/definitions/dto.CarModelColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelColor
+      tags:
+      - CarModelColors
+  /car-model-colors/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelColor response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelColors
+  /car-model-years/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelYear with carModelId and persianYearId
+      parameters:
+      - description: Create a CarModelYear
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelYearRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelYear response
+          schema:
+            $ref: '#/definitions/dto.CarModelYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelYear
+      tags:
+      - CarModelYears
+  /car-model-years/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelYear
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelYear
+      tags:
+      - CarModelYears
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelYear
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelYear response
+          schema:
+            $ref: '#/definitions/dto.CarModelYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelYear
+      tags:
+      - CarModelYears
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelYear
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelYear
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelYearRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelYear response
+          schema:
+            $ref: '#/definitions/dto.CarModelYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelYear
+      tags:
+      - CarModelYears
+  /car-model-years/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelYear response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelYears
+  /car-models/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModel
+      parameters:
+      - description: Create a CarModel
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModel response
+          schema:
+            $ref: '#/definitions/dto.CarModelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModel
+      tags:
+      - CarModels
+  /car-models/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModel
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModel
+      tags:
+      - CarModels
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModel
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModel response
+          schema:
+            $ref: '#/definitions/dto.CarModelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModel
+      tags:
+      - CarModels
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModel
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModel
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModel response
+          schema:
+            $ref: '#/definitions/dto.CarModelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModel
+      tags:
+      - CarModels
+  /car-models/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModel response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModels
+  /car-types/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarType
+      parameters:
+      - description: Create a CarType
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarTypeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarType response
+          schema:
+            $ref: '#/definitions/dto.CarTypeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarType
+      tags:
+      - CarTypes
+  /car-types/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarType
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarType
+      tags:
+      - CarTypes
+    get:
+      consumes:
+      - application/json
+      description: Get a CarType
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarType response
+          schema:
+            $ref: '#/definitions/dto.CarTypeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarType
+      tags:
+      - CarTypes
+    put:
+      consumes:
+      - application/json
+      description: Update a CarType
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarType
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarTypeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarType response
+          schema:
+            $ref: '#/definitions/dto.CarTypeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarType
+      tags:
+      - CarTypes
+  /car-types/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarType response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarTypes
+  /colors/:
+    post:
+      consumes:
+      - application/json
+      description: Create a Color
+      parameters:
+      - description: Create a Color
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateColorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Color response
+          schema:
+            $ref: '#/definitions/dto.ColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a Color
+      tags:
+      - Colors
+  /colors/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Color
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a Color
+      tags:
+      - Colors
+    get:
+      consumes:
+      - application/json
+      description: Get a Color
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Color response
+          schema:
+            $ref: '#/definitions/dto.ColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a Color
+      tags:
+      - Colors
+    put:
+      consumes:
+      - application/json
+      description: Update a Color
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a Color
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateColorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Color response
+          schema:
+            $ref: '#/definitions/dto.ColorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a Color
+      tags:
+      - Colors
+  /colors/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Color response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - Colors
+  /companies/:
+    post:
+      consumes:
+      - application/json
+      description: Create a Company
+      parameters:
+      - description: Create a Company
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Company response
+          schema:
+            $ref: '#/definitions/dto.CompanyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a Company
+      tags:
+      - Companies
+  /companies/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Company
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a Company
+      tags:
+      - Companies
+    get:
+      consumes:
+      - application/json
+      description: Get a Company
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Company response
+          schema:
+            $ref: '#/definitions/dto.CompanyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a Company
+      tags:
+      - Companies
+    put:
+      consumes:
+      - application/json
+      description: Update a Company
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a Company
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Company response
+          schema:
+            $ref: '#/definitions/dto.CompanyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a Company
+      tags:
+      - Companies
+  /companies/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Company response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - Companies
   /countries/:
     post:
       consumes:
@@ -644,6 +1825,429 @@ paths:
       summary: Get Files
       tags:
       - Files
+  /gearboxes/:
+    post:
+      consumes:
+      - application/json
+      description: Create a Gearbox
+      parameters:
+      - description: Create a Gearbox
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateGearboxTypeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Gearbox response
+          schema:
+            $ref: '#/definitions/dto.GearboxResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a Gearbox
+      tags:
+      - Gearboxes
+  /gearboxes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Gearbox
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a Gearbox
+      tags:
+      - Gearboxes
+    get:
+      consumes:
+      - application/json
+      description: Get a Gearbox
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Gearbox response
+          schema:
+            $ref: '#/definitions/dto.GearboxResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a Gearbox
+      tags:
+      - Gearboxes
+    put:
+      consumes:
+      - application/json
+      description: Update a Gearbox
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a Gearbox
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateGearboxRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Gearbox response
+          schema:
+            $ref: '#/definitions/dto.GearboxResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a Gearbox
+      tags:
+      - Gearboxes
+  /gearboxes/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Gearbox response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - Gearboxes
+  /properties/:
+    post:
+      consumes:
+      - application/json
+      description: Create a PropertyCategory
+      parameters:
+      - description: Create a Property
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePropertyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a PropertyCategory
+      tags:
+      - Properties
+  /properties/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a PropertyCategory
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a PropertyCategory
+      tags:
+      - Properties
+    get:
+      consumes:
+      - application/json
+      description: Get a PropertyCategory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a PropertyCategory
+      tags:
+      - Properties
+    put:
+      consumes:
+      - application/json
+      description: Update a PropertyCategory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a Property
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePropertyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a PropertyCategory
+      tags:
+      - Properties
+  /properties/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - Properties
+  /property-categories/:
+    post:
+      consumes:
+      - application/json
+      description: Create a PropertyCategory
+      parameters:
+      - description: Create a PropertyCategory
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePropertyCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a PropertyCategory
+      tags:
+      - PropertyCategories
+  /property-categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a PropertyCategory
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a PropertyCategory
+      tags:
+      - PropertyCategories
+    get:
+      consumes:
+      - application/json
+      description: Get a PropertyCategory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a PropertyCategory
+      tags:
+      - PropertyCategories
+    put:
+      consumes:
+      - application/json
+      description: Update a PropertyCategory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a PropertyCategory
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePropertyCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/dto.PropertyCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a PropertyCategory
+      tags:
+      - PropertyCategories
+  /property-categories/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PropertyCategory response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - PropertyCategories
   /users/login-by-mobile:
     post:
       consumes:
@@ -836,6 +2440,147 @@ paths:
       summary: UserById
       tags:
       - Test
+  /years/:
+    post:
+      consumes:
+      - application/json
+      description: Create a PersianYear
+      parameters:
+      - description: Create a PersianYear
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateYearRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: PersianYear response
+          schema:
+            $ref: '#/definitions/dto.PersianYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a PersianYear
+      tags:
+      - PersianYears
+  /years/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a PersianYear
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a PersianYear
+      tags:
+      - PersianYears
+    get:
+      consumes:
+      - application/json
+      description: Get a PersianYear
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PersianYear response
+          schema:
+            $ref: '#/definitions/dto.PersianYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a PersianYear
+      tags:
+      - PersianYears
+    put:
+      consumes:
+      - application/json
+      description: Update a PersianYear
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a PersianYear
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePersianYearRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PersianYear response
+          schema:
+            $ref: '#/definitions/dto.PersianYearResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a PersianYear
+      tags:
+      - PersianYears
+  /years/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: PersianYear response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - PersianYears
 securityDefinitions:
   AuthBearer:
     in: header

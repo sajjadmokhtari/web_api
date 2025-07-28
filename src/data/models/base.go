@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Country struct {
 	BaseModel
 	Name      string `gorm:"size:15;type:string;not null"`
@@ -9,17 +11,17 @@ type Country struct {
 
 type City struct {
 	BaseModel
-	Name      string `gorm:"size:10;type:string;not null"`
+	Name      string `gorm:"size:40;type:string;not null"`
 	CountryId int
 	Country   Country `gorm:"foreignKey:CountryId;constraint:OnUpdate:No ACTION:OnDelete:NO ACTION"`
 }
 
 type PersianYear struct {
 	BaseModel
-	PersianTitle  string `gorm:"size:10;not null;unique"`
-	Year          int    `gorm:"uniqueIndex;not null"` // 🔧 اصلاح `nut null` به `not null` و حذف `type;int`
-	StartAt       string `gorm:"type:timestamp with time zone;not null;unique"`
-	EndAt         string `gorm:"type:timestamp with time zone;not null;unique"`
+	PersianTitle  string    `gorm:"size:10;not null;unique"`
+	Year          int       `gorm:"type:int;uniqueIndex;not null"`
+	StartAt       time.Time `gorm:"type:TIMESTAMP with time zone; not null; unique"`
+	EndAt         time.Time `gorm:"type:TIMESTAMP with time zone; not null; unique"`
 	CarModelYears []CarModelYear
 }
 
