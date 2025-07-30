@@ -69,6 +69,10 @@ func InitServer(cfg *config.Config) {
         carModels := v1.Group("/car-models",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
         carModelColors := v1.Group("/car-model-colors",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
         carModelYears := v1.Group("/car-model-years",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+        carModelPriceHistories := v1.Group("/car-model-price-histories",middlewares.Authentication(cfg),middlewares.Authorization([]string{"admin"}))
+
+
+
         //Test
 		routers.Health(heath)
 		routers.TestRouter(test_router)
@@ -97,6 +101,7 @@ func InitServer(cfg *config.Config) {
 		routers.CarModel(carModels,cfg)
 		routers.CarModelColor(carModelColors,cfg)
 		routers.CarModelYear(carModelYears,cfg)
+		routers.CarModelPriceHistory(carModelPriceHistories,cfg)
 
 	}
 

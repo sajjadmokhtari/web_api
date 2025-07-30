@@ -47,11 +47,11 @@ type CarModelColor struct {
 
 type CarModelYear struct {
 	BaseModel
-	CarModelId           int
-	CarModel             CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	PersianYearId        int
-	PersianYear          PersianYear `gorm:"foreignKey:PersianYearId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	CarModelPriceHistory []CarModelPriceHistory
+	CarModelId             int                    `gorm:"uniqueIndex:idx"`
+	CarModel               CarModel               `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	PersianYearId          int                    `gorm:"uniqueIndex:idx"`
+	PersianYear            PersianYear            `gorm:"foreignKey:PersianYearId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	CarModelPriceHistories []CarModelPriceHistory `gorm:"foreignKey:CarModelYearId"`
 }
 
 type CarModelImage struct {

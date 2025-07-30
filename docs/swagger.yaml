@@ -6,6 +6,17 @@ definitions:
       id:
         type: integer
     type: object
+  dto.CarModelPriceHistoryResponse:
+    properties:
+      carModelYearId:
+        type: integer
+      id:
+        type: integer
+      price:
+        type: number
+      priceAt:
+        type: string
+    type: object
   dto.CarModelResponse:
     properties:
       carModelColors:
@@ -31,6 +42,10 @@ definitions:
     properties:
       carModelId:
         type: integer
+      carModelPriceHistories:
+        items:
+          $ref: '#/definitions/dto.CarModelPriceHistoryResponse'
+        type: array
       id:
         type: integer
       persianYear:
@@ -84,6 +99,19 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  dto.CreateCarModelPriceHistoryRequest:
+    properties:
+      carModelYearId:
+        type: integer
+      price:
+        type: number
+      priceAt:
+        type: string
+    required:
+    - carModelYearId
+    - price
+    - priceAt
     type: object
   dto.CreateCarModelRequest:
     properties:
@@ -383,6 +411,13 @@ definitions:
         type: integer
       colorId:
         type: integer
+    type: object
+  dto.UpdateCarModelPriceHistoryRequest:
+    properties:
+      price:
+        type: number
+      priceAt:
+        type: string
     type: object
   dto.UpdateCarModelRequest:
     properties:
@@ -834,6 +869,147 @@ paths:
       summary: Filter Countries by pagination & criteria
       tags:
       - CarModelColors
+  /car-model-price-histories/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelPriceHistory
+      parameters:
+      - description: Create a CarModelPriceHistory
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelPriceHistoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelPriceHistory response
+          schema:
+            $ref: '#/definitions/dto.CarModelPriceHistoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelPriceHistory
+      tags:
+      - CarModelPriceHistories
+  /car-model-price-histories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelPriceHistory
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelPriceHistory
+      tags:
+      - CarModelPriceHistories
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelPriceHistory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelPriceHistory response
+          schema:
+            $ref: '#/definitions/dto.CarModelPriceHistoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelPriceHistory
+      tags:
+      - CarModelPriceHistories
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelPriceHistory
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelPriceHistory
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelPriceHistoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelPriceHistory response
+          schema:
+            $ref: '#/definitions/dto.CarModelPriceHistoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelPriceHistory
+      tags:
+      - CarModelPriceHistories
+  /car-model-price-histories/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelPriceHistory response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelPriceHistories
   /car-model-years/:
     post:
       consumes:

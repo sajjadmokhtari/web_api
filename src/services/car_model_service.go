@@ -24,7 +24,7 @@ func NewCarModelService(cfg *config.Config) *CarModelService {
 				{string: "Gearbox"},
 				{string: "CarModelColors.Color"},
 				{string: "CarModelYears.PersianYear"},
-
+				{string: "CarModelYears.CarModelPriceHistories"},
 			},
 		},
 	}
