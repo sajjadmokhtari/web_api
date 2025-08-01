@@ -6,6 +6,17 @@ definitions:
       id:
         type: integer
     type: object
+  dto.CarModelImageResponse:
+    properties:
+      carModelId:
+        type: integer
+      id:
+        type: integer
+      image:
+        $ref: '#/definitions/dto.FileResponse'
+      isMainImage:
+        type: boolean
+    type: object
   dto.CarModelPriceHistoryResponse:
     properties:
       carModelYearId:
@@ -22,6 +33,10 @@ definitions:
       carModelColors:
         items:
           $ref: '#/definitions/dto.CarModelColorResponse'
+        type: array
+      carModelImages:
+        items:
+          $ref: '#/definitions/dto.CarModelImageResponse'
         type: array
       carModelYears:
         items:
@@ -99,6 +114,18 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  dto.CreateCarModelImageRequest:
+    properties:
+      carModelId:
+        type: integer
+      imageId:
+        type: integer
+      isMainImage:
+        type: boolean
+    required:
+    - carModelId
+    - imageId
     type: object
   dto.CreateCarModelPriceHistoryRequest:
     properties:
@@ -411,6 +438,11 @@ definitions:
         type: integer
       colorId:
         type: integer
+    type: object
+  dto.UpdateCarModelImageRequest:
+    properties:
+      isMainImage:
+        type: boolean
     type: object
   dto.UpdateCarModelPriceHistoryRequest:
     properties:
@@ -869,6 +901,147 @@ paths:
       summary: Filter Countries by pagination & criteria
       tags:
       - CarModelColors
+  /car-model-images/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelImage
+      parameters:
+      - description: Create a CarModelImage
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelImageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelImage response
+          schema:
+            $ref: '#/definitions/dto.CarModelImageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelImage
+      tags:
+      - CarModelImages
+  /car-model-images/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelImage
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelImage
+      tags:
+      - CarModelImages
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelImage
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelImage response
+          schema:
+            $ref: '#/definitions/dto.CarModelImageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelImage
+      tags:
+      - CarModelImages
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelImage
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelImage
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelImageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelImage response
+          schema:
+            $ref: '#/definitions/dto.CarModelImageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelImage
+      tags:
+      - CarModelImages
+  /car-model-images/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelImage response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelImages
   /car-model-price-histories/:
     post:
       consumes:
