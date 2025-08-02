@@ -28,6 +28,17 @@ definitions:
       priceAt:
         type: string
     type: object
+  dto.CarModelPropertyResponse:
+    properties:
+      carModelId:
+        type: integer
+      id:
+        type: integer
+      property:
+        $ref: '#/definitions/dto.PropertyResponse'
+      value:
+        type: string
+    type: object
   dto.CarModelResponse:
     properties:
       carModelColors:
@@ -37,6 +48,10 @@ definitions:
       carModelImages:
         items:
           $ref: '#/definitions/dto.CarModelImageResponse'
+        type: array
+      carModelProperties:
+        items:
+          $ref: '#/definitions/dto.CarModelPropertyResponse'
         type: array
       carModelYears:
         items:
@@ -115,6 +130,16 @@ definitions:
       name:
         type: string
     type: object
+  dto.CreateCarModelColorRequest:
+    properties:
+      carModelId:
+        type: integer
+      colorId:
+        type: integer
+    required:
+    - carModelId
+    - colorId
+    type: object
   dto.CreateCarModelImageRequest:
     properties:
       carModelId:
@@ -139,6 +164,20 @@ definitions:
     - carModelYearId
     - price
     - priceAt
+    type: object
+  dto.CreateCarModelPropertyRequest:
+    properties:
+      carModelId:
+        type: integer
+      propertyId:
+        type: integer
+      value:
+        maxLength: 100
+        type: string
+    required:
+    - carModelId
+    - propertyId
+    - value
     type: object
   dto.CreateCarModelRequest:
     properties:
@@ -176,6 +215,17 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  dto.CreateColorRequest:
+    properties:
+      hexCode:
+        maxLength: 7
+        minLength: 7
+        type: string
+      name:
+        maxLength: 15
+        minLength: 3
+        type: string
     type: object
   dto.CreateCompanyRequest:
     properties:
@@ -450,6 +500,14 @@ definitions:
         type: number
       priceAt:
         type: string
+    type: object
+  dto.UpdateCarModelPropertyRequest:
+    properties:
+      value:
+        maxLength: 100
+        type: string
+    required:
+    - value
     type: object
   dto.UpdateCarModelRequest:
     properties:
@@ -771,7 +829,7 @@ paths:
         name: Request
         required: true
         schema:
-          $ref: '#/definitions/dto.UpdateCarModelColorRequest'
+          $ref: '#/definitions/dto.CreateCarModelColorRequest'
       produces:
       - application/json
       responses:
@@ -1183,6 +1241,147 @@ paths:
       summary: Filter Countries by pagination & criteria
       tags:
       - CarModelPriceHistories
+  /car-model-properties/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelProperty
+      parameters:
+      - description: Create a CarModelProperty
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelPropertyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelProperty response
+          schema:
+            $ref: '#/definitions/dto.CarModelPropertyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelProperty
+      tags:
+      - CarModelProperties
+  /car-model-properties/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelProperty
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelProperty
+      tags:
+      - CarModelProperties
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelProperty
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelProperty response
+          schema:
+            $ref: '#/definitions/dto.CarModelPropertyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelProperty
+      tags:
+      - CarModelProperties
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelProperty
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelProperty
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelPropertyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelProperty response
+          schema:
+            $ref: '#/definitions/dto.CarModelPropertyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelProperty
+      tags:
+      - CarModelProperties
+  /car-model-properties/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelProperty response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelProperties
   /car-model-years/:
     post:
       consumes:
@@ -1617,7 +1816,7 @@ paths:
         name: Request
         required: true
         schema:
-          $ref: '#/definitions/dto.UpdateColorRequest'
+          $ref: '#/definitions/dto.CreateColorRequest'
       produces:
       - application/json
       responses:

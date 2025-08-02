@@ -16,6 +16,10 @@ type PropertyCategoryResponse struct {
 	Properties []PropertyResponse `json:"properties,omitempty"`
 }
 
+
+
+
+
 type CreatePropertyRequest struct {
 	Name        string `json:"name" binding:"required,alpha,min=3,max=60"`
 	Icon        string `json:"icon" binding:"min=1,max=1000"`

@@ -10,12 +10,12 @@ import (
 )
 
 type CarModelService struct {
-	base *BaseService[models.CarModel, dto.UpdateCarModelRequest, dto.UpdateCarModelRequest, dto.CarModelResponse]
+	base *BaseService[models.CarModel, dto.CreateCarModelRequest, dto.UpdateCarModelRequest, dto.CarModelResponse]
 }
 
 func NewCarModelService(cfg *config.Config) *CarModelService {
 	return &CarModelService{
-		base: &BaseService[models.CarModel, dto.UpdateCarModelRequest, dto.UpdateCarModelRequest, dto.CarModelResponse]{
+		base: &BaseService[models.CarModel, dto.CreateCarModelRequest, dto.UpdateCarModelRequest, dto.CarModelResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 			Preload: []preload{
@@ -26,13 +26,14 @@ func NewCarModelService(cfg *config.Config) *CarModelService {
 				{string: "CarModelYears.PersianYear"},
 				{string: "CarModelYears.CarModelPriceHistories"},
 				{string: "CarModelImages.Image"},
+				{string: "CarModelProperties.Property"},
 			},
 		},
 	}
 
 }
 
-func (s *CarModelService) Create(ctx context.Context, req *dto.UpdateCarModelRequest) (*dto.CarModelResponse, error) {
+func (s *CarModelService) Create(ctx context.Context, req *dto.CreateCarModelRequest) (*dto.CarModelResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

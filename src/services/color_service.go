@@ -10,12 +10,12 @@ import (
 )
 
 type ColorService struct {
-	base *BaseService[models.Color, dto.UpdateColorRequest, dto.UpdateColorRequest, dto.ColorResponse]
+	base *BaseService[models.Color, dto.CreateColorRequest, dto.UpdateColorRequest, dto.ColorResponse]
 }
 
 func NewColorService(cfg *config.Config) *ColorService {
 	return &ColorService{
-		base: &BaseService[models.Color, dto.UpdateColorRequest, dto.UpdateColorRequest, dto.ColorResponse]{
+		base: &BaseService[models.Color, dto.CreateColorRequest, dto.UpdateColorRequest, dto.ColorResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 
@@ -25,7 +25,7 @@ func NewColorService(cfg *config.Config) *ColorService {
 
 }
 
-func (s *ColorService) Create(ctx context.Context, req *dto.UpdateColorRequest) (*dto.ColorResponse, error) {
+func (s *ColorService) Create(ctx context.Context, req *dto.CreateColorRequest) (*dto.ColorResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

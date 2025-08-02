@@ -26,6 +26,10 @@ type CityResponse struct {
 	Country CountryResponse `json:"country"`
 }
 
+
+
+
+
 type FileFormRequest struct {
 	File *multipart.FileHeader `json:"file" form:"file" binding:"required" swaggerignore:"true"`
 }
@@ -53,6 +57,13 @@ type FileResponse struct {
 	Description string `json:"description"`
 	MimeType    string `json:"mimeType"`
 }
+
+
+
+
+
+
+
 
 type CreateCompanyRequest struct {
 	Name      string `json:"name,omitempty" binding:"alpha,min=3,max=20"`
@@ -98,6 +109,11 @@ type CarModelColorResponse struct {
 	Id    int           `json:"id"`
 	Color ColorResponse `json:"color,omitempty"`
 }
+
+
+
+
+
 
 type CreateYearRequest struct {
 	PersianTitle string    `json:"persianTitle" binding:"min=4,max=4"`

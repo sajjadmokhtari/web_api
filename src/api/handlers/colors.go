@@ -23,7 +23,7 @@ func NewColorHandler(cfg *config.Config) *ColorHandler {
 // @Tags Colors
 // @Accept json
 // @Produce json
-// @Param Request body dto.UpdateColorRequest true "Create a Color"
+// @Param Request body dto.CreateColorRequest true "Create a Color"
 // @Success 201 {object} dto.ColorResponse "Color response"
 // @Failure 400 {object} helper.BaseHttpResponse "Bad Request"
 // @Router /colors/ [post]

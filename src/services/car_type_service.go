@@ -10,12 +10,12 @@ import (
 )
 
 type CarTypeService struct {
-	base *BaseService[models.CarType, dto.UpdateCarTypeRequest, dto.UpdateCarTypeRequest, dto.CarTypeResponse]
+	base *BaseService[models.CarType, dto.CreateCarTypeRequest, dto.UpdateCarTypeRequest, dto.CarTypeResponse]
 }
 
 func NewCarTypeService(cfg *config.Config) *CarTypeService {
 	return &CarTypeService{
-		base: &BaseService[models.CarType, dto.UpdateCarTypeRequest, dto.UpdateCarTypeRequest, dto.CarTypeResponse]{
+		base: &BaseService[models.CarType, dto.CreateCarTypeRequest, dto.UpdateCarTypeRequest, dto.CarTypeResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 
@@ -24,7 +24,7 @@ func NewCarTypeService(cfg *config.Config) *CarTypeService {
 
 }
 
-func (s *CarTypeService) Create(ctx context.Context, req *dto.UpdateCarTypeRequest) (*dto.CarTypeResponse, error) {
+func (s *CarTypeService) Create(ctx context.Context, req *dto.CreateCarTypeRequest) (*dto.CarTypeResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

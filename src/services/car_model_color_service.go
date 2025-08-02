@@ -1,6 +1,5 @@
 package services
 
-
 import (
 	"GOLANG_CLEAN_WEB_API/src/api/dto"
 	"GOLANG_CLEAN_WEB_API/src/config"
@@ -11,12 +10,12 @@ import (
 )
 
 type CarModelColorService struct {
-	base *BaseService[models.CarModelColor, dto.UpdateCarModelColorRequest, dto.UpdateCarModelColorRequest, dto.CarModelColorResponse]
+	base *BaseService[models.CarModelColor, dto.CreateCarModelColorRequest, dto.UpdateCarModelColorRequest, dto.CarModelColorResponse]
 }
 
 func NewCarModelColorService(cfg *config.Config) *CarModelColorService {
 	return &CarModelColorService{
-		base: &BaseService[models.CarModelColor, dto.UpdateCarModelColorRequest, dto.UpdateCarModelColorRequest, dto.CarModelColorResponse]{
+		base: &BaseService[models.CarModelColor, dto.CreateCarModelColorRequest, dto.UpdateCarModelColorRequest, dto.CarModelColorResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 			Preload: []preload{
@@ -27,7 +26,7 @@ func NewCarModelColorService(cfg *config.Config) *CarModelColorService {
 
 }
 
-func (s *CarModelColorService) Create(ctx context.Context, req *dto.UpdateCarModelColorRequest) (*dto.CarModelColorResponse, error) {
+func (s *CarModelColorService) Create(ctx context.Context, req *dto.CreateCarModelColorRequest) (*dto.CarModelColorResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

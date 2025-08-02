@@ -10,12 +10,12 @@ import (
 )
 
 type CompanyService struct {
-	base *BaseService[models.Company, dto.UpdateCompanyRequest, dto.UpdateCompanyRequest, dto.CompanyResponse]
+	base *BaseService[models.Company, dto.CreateCompanyRequest, dto.UpdateCompanyRequest, dto.CompanyResponse]
 }
 
 func NewCompanyService(cfg *config.Config) *CompanyService {
 	return &CompanyService{
-		base: &BaseService[models.Company, dto.UpdateCompanyRequest, dto.UpdateCompanyRequest, dto.CompanyResponse]{
+		base: &BaseService[models.Company, dto.CreateCompanyRequest, dto.UpdateCompanyRequest, dto.CompanyResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 			Preload:  []preload{{string: "Country"}}, // 🌟 این خط کمپانی رو کامل می‌کنه
@@ -23,7 +23,7 @@ func NewCompanyService(cfg *config.Config) *CompanyService {
 	}
 }
 
-func (s *CompanyService) Create(ctx context.Context, req *dto.UpdateCompanyRequest) (*dto.CompanyResponse, error) {
+func (s *CompanyService) Create(ctx context.Context, req *dto.CreateCompanyRequest) (*dto.CompanyResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

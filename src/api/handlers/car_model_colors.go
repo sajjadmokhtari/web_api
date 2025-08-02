@@ -23,7 +23,7 @@ func NewCarModelColorHandler(cfg *config.Config) *CarModelColorHandler {
 // @Tags CarModelColors
 // @Accept json
 // @Produce json
-// @Param Request body dto.UpdateCarModelColorRequest true "Create a CarModelColor"
+// @Param Request body dto.CreateCarModelColorRequest true "Create a CarModelColor"
 // @Success 201 {object} dto.CarModelColorResponse "CarModelColor response"
 // @Failure 400 {object} helper.BaseHttpResponse "Bad Request"
 // @Router /car-model-colors/ [post]

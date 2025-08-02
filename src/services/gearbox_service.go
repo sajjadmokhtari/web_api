@@ -10,12 +10,12 @@ import (
 )
 
 type GearboxService struct {
-	base *BaseService[models.Gearbox, dto.UpdateGearboxRequest, dto.UpdateGearboxRequest, dto.GearboxResponse]
+	base *BaseService[models.Gearbox, dto.CreateGearboxTypeRequest, dto.UpdateGearboxRequest, dto.GearboxResponse]
 }
 
 func NewGearboxService(cfg *config.Config) *GearboxService {
 	return &GearboxService{
-		base: &BaseService[models.Gearbox, dto.UpdateGearboxRequest, dto.UpdateGearboxRequest, dto.GearboxResponse]{
+		base: &BaseService[models.Gearbox, dto.CreateGearboxTypeRequest, dto.UpdateGearboxRequest, dto.GearboxResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 
@@ -24,7 +24,7 @@ func NewGearboxService(cfg *config.Config) *GearboxService {
 
 }
 
-func (s *GearboxService) Create(ctx context.Context, req *dto.UpdateGearboxRequest) (*dto.GearboxResponse, error) {
+func (s *GearboxService) Create(ctx context.Context, req *dto.CreateGearboxTypeRequest) (*dto.GearboxResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

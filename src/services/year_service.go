@@ -10,12 +10,12 @@ import (
 )
 
 type PersianYearService struct {
-	base *BaseService[models.PersianYear, dto.UpdatePersianYearRequest, dto.UpdatePersianYearRequest, dto.PersianYearResponse]
+	base *BaseService[models.PersianYear, dto.CreateYearRequest, dto.UpdatePersianYearRequest, dto.PersianYearResponse]
 }
 
 func NewPersianYearService(cfg *config.Config) *PersianYearService {
 	return &PersianYearService{
-		base: &BaseService[models.PersianYear, dto.UpdatePersianYearRequest, dto.UpdatePersianYearRequest, dto.PersianYearResponse]{
+		base: &BaseService[models.PersianYear, dto.CreateYearRequest, dto.UpdatePersianYearRequest, dto.PersianYearResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 
@@ -24,7 +24,7 @@ func NewPersianYearService(cfg *config.Config) *PersianYearService {
 
 }
 
-func (s *PersianYearService) Create(ctx context.Context, req *dto.UpdatePersianYearRequest) (*dto.PersianYearResponse, error) {
+func (s *PersianYearService) Create(ctx context.Context, req *dto.CreateYearRequest) (*dto.PersianYearResponse, error) {
 	return s.base.Create(ctx, req)
 
 }

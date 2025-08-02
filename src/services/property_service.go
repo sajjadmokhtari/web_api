@@ -10,12 +10,12 @@ import (
 )
 
 type PropertyService struct {
-	base *BaseService[models.Property, dto.UpdatePropertyRequest, dto.UpdatePropertyRequest, dto.PropertyResponse]
+	base *BaseService[models.Property, dto.CreatePropertyRequest, dto.UpdatePropertyRequest, dto.PropertyResponse]
 }
 
 func NewPropertyService(cfg *config.Config) *PropertyService {
 	return &PropertyService{
-		base: &BaseService[models.Property, dto.UpdatePropertyRequest, dto.UpdatePropertyRequest, dto.PropertyResponse]{
+		base: &BaseService[models.Property, dto.CreatePropertyRequest, dto.UpdatePropertyRequest, dto.PropertyResponse]{
 			Database: db.GetDb(),
 			Logger:   logging.NewLogger(cfg),
 			Preload:  []preload{{string: "Category"}},
@@ -23,7 +23,7 @@ func NewPropertyService(cfg *config.Config) *PropertyService {
 	}
 }
 
-func (s *PropertyService) Create(ctx context.Context, req *dto.UpdatePropertyRequest) (*dto.PropertyResponse, error) {
+func (s *PropertyService) Create(ctx context.Context, req *dto.CreatePropertyRequest) (*dto.PropertyResponse, error) {
 	return s.base.Create(ctx, req)
 
 }
