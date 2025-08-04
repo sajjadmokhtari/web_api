@@ -69,7 +69,11 @@ func InitServer(cfg *config.Config) {
 		carModelPriceHistories := v1.Group("/car-model-price-histories", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
 		carModelImage := v1.Group("/car-model-images", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
         carModelProperties := v1.Group("/car-model-properties", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
+        carModelComments := v1.Group("/car-model-comments", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin","default"}))
+
+
 		//Test
+
 		routers.Health(heath)
 		routers.TestRouter(test_router)
 
@@ -97,6 +101,7 @@ func InitServer(cfg *config.Config) {
 		routers.CarModelPriceHistory(carModelPriceHistories, cfg)
 		routers.CarModelImage(carModelImage, cfg)
 		routers.CarModelProperty(carModelProperties,cfg)
+		routers.CarModelComment(carModelComments,cfg)
 
 		r.Static("/static", "./uploads")
 	}

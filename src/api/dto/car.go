@@ -15,9 +15,6 @@ type CarTypeResponse struct {
 	Name string `json:"name"`
 }
 
-
-
-
 type CreateGearboxTypeRequest struct {
 	Name string `json:"name" binding:"required,alpha,min=3,max=15"`
 }
@@ -30,9 +27,6 @@ type GearboxResponse struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
-
-
-
 
 type CreateCarModelRequest struct {
 	Name      string `json:"name" binding:"required,min=3,max=15"`
@@ -58,9 +52,8 @@ type CarModelResponse struct {
 	CarModelYears      []CarModelYearResponse     `json:"carModelYears,omitempty"`
 	CarModelImages     []CarModelImageResponse    `json:"carModelImages,omitempty"`
 	CarModelProperties []CarModelPropertyResponse `json:"carModelProperties,omitempty"`
+	CarModelComments   []CarModelCommentResponse  `json:"carModelComments,omitempty"`
 }
-
-
 
 type CreateCarModelYearRequest struct {
 	CarModelId    int `json:"carModelId" binding:"required"`
@@ -76,8 +69,6 @@ type CarModelYearResponse struct {
 	CarModelId             int                            `json:"carModelId,omitempty"`
 	CarModelPriceHistories []CarModelPriceHistoryResponse `json:"carModelPriceHistories,omitempty"`
 }
-
-
 
 type CreateCarModelPriceHistoryRequest struct {
 	CarModelYearId int       `json:"carModelYearId" binding:"required"`
@@ -127,4 +118,30 @@ type CarModelPropertyResponse struct {
 	CarModelId int              `json:"carModelId,omitempty"`
 	Property   PropertyResponse `json:"property,omitempty"`
 	Value      string           `json:"value"`
+}
+
+
+
+
+
+type CreateCarModelCommentRequest struct {
+	CarModelId int    `json:"carModelId" binding:"required"`
+	UserId int `json:"userId"` 
+	Message    string `json:"message" binding:"required,max=100"`
+}
+type UpdateCarModelCommentRequest struct {
+	Message string `json:"message" binding:"required,max=100"`
+}
+type CarModelCommentResponse struct {
+	Id         int          `json:"id"`
+	CarModelId int          `json:"carModelId"`
+	User       UserResponse `json:"user"`
+	Message    string       `json:"message" binding:"required,max=100"`
+}
+type UserResponse struct {
+	Id        int    `json:"id"`
+	UserName  string `json:"userName"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
 }

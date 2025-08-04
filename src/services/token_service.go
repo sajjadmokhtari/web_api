@@ -107,20 +107,20 @@ func (s *TokenService) VerifyToken(token string) (*jwt.Token, error) {
 }
 
 func (s *TokenService) GetClaims(token string) (claimMap map[string]interface{}, err error) {
-	claimMap = map[string]interface{}{}
-	verifyToken, err := s.VerifyToken(token)
-	if err != nil {
-		return nil, err
+    claimMap = map[string]interface{}{}
 
-	}
-	claims, ok := verifyToken.Claims.(jwt.MapClaims)
-	if ok && verifyToken.Valid {
-		for k, v := range claims {
-			claimMap[k] = v
+    verifyToken, err := s.VerifyToken(token)
+    if err != nil {
+        return nil, err
+    }
 
-		}
-		return claimMap, nil
+    claims, ok := verifyToken.Claims.(jwt.MapClaims)
+    if ok && verifyToken.Valid {
+        for k, v := range claims {
+            fmt.Printf("🔍 Claim Key: %s => Value: %v\n", k, v)
+            claimMap[k] = v
+        }
+    }
 
-	}
-	return nil, &service_errors.ServiceError{EndUserMessage: service_errors.ClaimsNotFound}
+    return claimMap, nil
 }

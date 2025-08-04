@@ -9,7 +9,7 @@ const (
 	RedisOtpDefaultKey string = "otp"
 	//claim
 	AuthorizationHeaderKey string = "Authorization"
-	UserIdKey              string = "Authorization"
+	UserIdKey              string = "UserId"
 	FirstNameKey           string = "firstName"
 	LastNameKey            string = "lastName"
 	UserNameKey            string = "userName"

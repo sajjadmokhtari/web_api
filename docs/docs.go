@@ -463,6 +463,230 @@ const docTemplate = `{
                 }
             }
         },
+        "/car-model-comments/": {
+            "post": {
+                "security": [
+                    {
+                        "AuthBearer": []
+                    }
+                ],
+                "description": "Create a CarModelComment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CarModelComments"
+                ],
+                "summary": "Create a CarModelComment",
+                "parameters": [
+                    {
+                        "description": "Create a CarModelComment",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateCarModelCommentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "CarModelComment response",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CarModelCommentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/car-model-comments/get-by-filter": {
+            "post": {
+                "security": [
+                    {
+                        "AuthBearer": []
+                    }
+                ],
+                "description": "Returns paginated list of countries based on filters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CarModelComments"
+                ],
+                "summary": "Filter Countries by pagination \u0026 criteria",
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PaginationInputWithFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CarModelComment response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/car-model-comments/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "AuthBearer": []
+                    }
+                ],
+                "description": "Get a CarModelComment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CarModelComments"
+                ],
+                "summary": "Get a CarModelComment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CarModelComment response",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CarModelCommentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "AuthBearer": []
+                    }
+                ],
+                "description": "Update a CarModelComment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CarModelComments"
+                ],
+                "summary": "Update a CarModelComment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update a CarModelComment",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateCarModelCommentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "CarModelComment response",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CarModelCommentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AuthBearer": []
+                    }
+                ],
+                "description": "Delete a CarModelComment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CarModelComments"
+                ],
+                "summary": "Delete a CarModelComment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.BaseHttpResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/car-model-images/": {
             "post": {
                 "security": [
@@ -3913,6 +4137,27 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CarModelCommentResponse": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "carModelId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "user": {
+                    "$ref": "#/definitions/dto.UserResponse"
+                }
+            }
+        },
         "dto.CarModelImageResponse": {
             "type": "object",
             "properties": {
@@ -3971,6 +4216,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.CarModelColorResponse"
+                    }
+                },
+                "carModelComments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CarModelCommentResponse"
                     }
                 },
                 "carModelImages": {
@@ -4115,6 +4366,26 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "colorId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.CreateCarModelCommentRequest": {
+            "type": "object",
+            "required": [
+                "carModelId",
+                "message",
+                "userId"
+            ],
+            "properties": {
+                "carModelId": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -4627,6 +4898,18 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UpdateCarModelCommentRequest": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
         "dto.UpdateCarModelImageRequest": {
             "type": "object",
             "properties": {
@@ -4802,6 +5085,26 @@ const docTemplate = `{
                 "unit": {
                     "type": "string",
                     "maxLength": 15
+                }
+            }
+        },
+        "dto.UserResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
                 }
             }
         },

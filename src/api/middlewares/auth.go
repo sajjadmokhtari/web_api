@@ -42,6 +42,8 @@ func Authentication(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 		c.Set(constants.UserIdKey, claimMap[constants.UserIdKey])
+		fmt.Printf("✅ Auth Middleware: UserId ست شد => %v\n", claimMap[constants.UserIdKey])
+
 		c.Set(constants.FirstNameKey, claimMap[constants.FirstNameKey])
 		c.Set(constants.LastNameKey, claimMap[constants.LastNameKey])
 		c.Set(constants.UserNameKey, claimMap[constants.UserNameKey])

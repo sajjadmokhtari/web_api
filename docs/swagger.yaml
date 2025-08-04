@@ -6,6 +6,20 @@ definitions:
       id:
         type: integer
     type: object
+  dto.CarModelCommentResponse:
+    properties:
+      carModelId:
+        type: integer
+      id:
+        type: integer
+      message:
+        maxLength: 100
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    required:
+    - message
+    type: object
   dto.CarModelImageResponse:
     properties:
       carModelId:
@@ -44,6 +58,10 @@ definitions:
       carModelColors:
         items:
           $ref: '#/definitions/dto.CarModelColorResponse'
+        type: array
+      carModelComments:
+        items:
+          $ref: '#/definitions/dto.CarModelCommentResponse'
         type: array
       carModelImages:
         items:
@@ -139,6 +157,20 @@ definitions:
     required:
     - carModelId
     - colorId
+    type: object
+  dto.CreateCarModelCommentRequest:
+    properties:
+      carModelId:
+        type: integer
+      message:
+        maxLength: 100
+        type: string
+      userId:
+        type: integer
+    required:
+    - carModelId
+    - message
+    - userId
     type: object
   dto.CreateCarModelImageRequest:
     properties:
@@ -489,6 +521,14 @@ definitions:
       colorId:
         type: integer
     type: object
+  dto.UpdateCarModelCommentRequest:
+    properties:
+      message:
+        maxLength: 100
+        type: string
+    required:
+    - message
+    type: object
   dto.UpdateCarModelImageRequest:
     properties:
       isMainImage:
@@ -607,6 +647,19 @@ definitions:
         type: string
       unit:
         maxLength: 15
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      userName:
         type: string
     type: object
   handlers.personData:
@@ -959,6 +1012,147 @@ paths:
       summary: Filter Countries by pagination & criteria
       tags:
       - CarModelColors
+  /car-model-comments/:
+    post:
+      consumes:
+      - application/json
+      description: Create a CarModelComment
+      parameters:
+      - description: Create a CarModelComment
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCarModelCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CarModelComment response
+          schema:
+            $ref: '#/definitions/dto.CarModelCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Create a CarModelComment
+      tags:
+      - CarModelComments
+  /car-model-comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a CarModelComment
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Delete a CarModelComment
+      tags:
+      - CarModelComments
+    get:
+      consumes:
+      - application/json
+      description: Get a CarModelComment
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelComment response
+          schema:
+            $ref: '#/definitions/dto.CarModelCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Get a CarModelComment
+      tags:
+      - CarModelComments
+    put:
+      consumes:
+      - application/json
+      description: Update a CarModelComment
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update a CarModelComment
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarModelCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelComment response
+          schema:
+            $ref: '#/definitions/dto.CarModelCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Update a CarModelComment
+      tags:
+      - CarModelComments
+  /car-model-comments/get-by-filter:
+    post:
+      consumes:
+      - application/json
+      description: Returns paginated list of countries based on filters
+      parameters:
+      - description: Request
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PaginationInputWithFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: CarModelComment response
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      security:
+      - AuthBearer: []
+      summary: Filter Countries by pagination & criteria
+      tags:
+      - CarModelComments
   /car-model-images/:
     post:
       consumes:

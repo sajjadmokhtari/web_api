@@ -56,10 +56,10 @@ type CarModelYear struct {
 
 type CarModelImage struct {
 	BaseModel
-	CarModelId int
-	CarModel   CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	ImageId    int
-	Image      File `gorm:"foreignKey:ImageId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	CarModelId  int
+	CarModel    CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
+	ImageId     int
+	Image       File `gorm:"foreignKey:ImageId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	IsMainImage bool `gorm:"not null"`
 }
 
@@ -84,7 +84,7 @@ type CarModelComment struct {
 	BaseModel
 	CarModel   CarModel `gorm:"foreignKey:CarModelId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
 	CarModelId int
-	User       User `gorm:"foreignKey:UserId;constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION"`
-	UserId     int
-	Message    string `gorm:"size:500;not null"`
+	UserId     int  `gorm:"column:user_id;not null"` 
+	User       User `gorm:"foreignKey:UserId;references:Id"`
+	Message string `gorm:"size:500;not null"`
 }

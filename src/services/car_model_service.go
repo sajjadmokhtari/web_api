@@ -27,6 +27,7 @@ func NewCarModelService(cfg *config.Config) *CarModelService {
 				{string: "CarModelYears.CarModelPriceHistories"},
 				{string: "CarModelImages.Image"},
 				{string: "CarModelProperties.Property"},
+				{string: "CarModelComments.User"},
 			},
 		},
 	}
