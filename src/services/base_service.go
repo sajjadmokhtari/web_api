@@ -8,12 +8,14 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/data/db"
 	"GOLANG_CLEAN_WEB_API/src/data/models"
 	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
+	"GOLANG_CLEAN_WEB_API/src/pkg/metrics"
 	"GOLANG_CLEAN_WEB_API/src/pkg/service_errors"
 	"context"
 	"database/sql"
 	"fmt"
 	"math"
 	"reflect"
+
 	"strings"
 	"time"
 
@@ -27,15 +29,15 @@ type preload struct {
 type BaseService[T any, Tc any, Tu any, Tr any] struct {
 	Database *gorm.DB
 	Logger   logging.Logger
-	Preload []preload
+	Preload  []preload
 }
 
 func NewBaseService[T any, Tc any, Tu any, Tr any](cfg *config.Config) *BaseService[T, Tc, Tu, Tr] {
 	return &BaseService[T, Tc, Tu, Tr]{
 		Database: db.GetDb(),
-		
-		Logger:   logging.NewLogger(cfg),
-		Preload:  []preload{{string: "Cities"}}, // این نیود تو ویدو  خودم اضافه کردم فکر کنم  الکیه
+
+		Logger:  logging.NewLogger(cfg),
+		Preload: []preload{{string: "Cities"}}, // این نیود تو ویدو  خودم اضافه کردم فکر کنم  الکیه
 	}
 }
 
@@ -48,10 +50,12 @@ func (s *BaseService[T, Tc, Tu, Tr]) Create(ctx context.Context, req *Tc) (*Tr, 
 	if err != nil {
 		tx.Rollback()
 		s.Logger.Error(logging.Postgres, logging.Insert, err.Error(), nil)
+		metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Create", "Failed").Inc()
 		return nil, err
 	}
 	tx.Commit()
 	bm, _ := common.TypeConverter[models.BaseModel](model)
+	metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Create", "Success").Inc()
 	return s.GetById(ctx, bm.Id)
 
 }
@@ -59,10 +63,10 @@ func (s *BaseService[T, Tc, Tu, Tr]) Create(ctx context.Context, req *Tc) (*Tr, 
 func (s *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu, id int) (*Tr, error) {
 	updateMap, _ := common.TypeConverter[map[string]interface{}](req)
 	snakeMap := map[string]interface{}{}
-	for k,v :=range *updateMap {
+	for k, v := range *updateMap {
 		snakeMap[common.ToSnakeCase(k)] = v
 	}
-	
+
 	(snakeMap)["modified_by"] = &sql.NullInt64{Int64: int64(ctx.Value(constants.UserIdKey).(float64)), Valid: true}
 	(snakeMap)["modified_at"] = sql.NullTime{Valid: true, Time: time.Now().UTC()}
 
@@ -78,10 +82,12 @@ func (s *BaseService[T, Tc, Tu, Tr]) Update(ctx context.Context, req *Tu, id int
 	if err != nil {
 		tx.Rollback()
 		s.Logger.Error(logging.Postgres, logging.Update, err.Error(), nil)
+		metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Update", "Failed").Inc()
 		return nil, err
 	}
 
 	tx.Commit()
+	metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Update", "Success").Inc()
 	return s.GetById(ctx, id)
 }
 
@@ -104,29 +110,39 @@ func (s *BaseService[T, Tc, Tu, Tr]) Delete(ctx context.Context, id int) error {
 		RowsAffected; cnt == 0 {
 		tx.Rollback()
 		s.Logger.Error(logging.Postgres, logging.Update, service_errors.PermissionDenied, nil)
+		metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Delete", "Failed").Inc()
 		tx.Rollback()
+
 		return &service_errors.ServiceError{EndUserMessage: service_errors.RecordNotFound}
 	}
 	tx.Commit()
+	metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "Delete", "Success").Inc()
 	return nil
 }
 
 func (s *BaseService[T, Tc, Tu, Tr]) GetById(ctx context.Context, id int) (*Tr, error) {
 	model := new(T)
-	db:= Preload(s.Database,s.Preload)
+	db := Preload(s.Database, s.Preload)
 	err := db.
 		Where("id = ? AND deleted_by IS NULL", id).
 		First(model).
 		Error
 	if err != nil {
+		metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "GetById", "Failed").Inc()
 		return nil, err
 	}
+	metrics.DbCall.WithLabelValues(reflect.TypeOf(*model).String(), "GetById", "Success").Inc()
 
 	return common.TypeConverter[Tr](model)
 }
 
 func (s *BaseService[T, Tc, Tu, Tr]) GetByFilter(ctx context.Context, req *dto.PaginationInputWithFilter) (*dto.PagedList[Tr], error) {
-	return Paginate[T, Tr](req, s.Preload, s.Database)
+	res, err := Paginate[T, Tr](req, s.Preload, s.Database)
+	if err != nil {
+		metrics.DbCall.WithLabelValues(reflect.TypeOf(*new(T)).String(), "GetByFilter", "Failed").Inc()
+	}
+	metrics.DbCall.WithLabelValues(reflect.TypeOf(*new(T)).String(), "GetById", "Success").Inc()
+	return res, nil
 }
 
 func NewPageList[T any](items *[]T, count int64, pageNumber int, pageSize int64) *dto.PagedList[T] {

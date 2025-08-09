@@ -6,23 +6,32 @@ import (
 	"GOLANG_CLEAN_WEB_API/src/api/routers"
 	validations "GOLANG_CLEAN_WEB_API/src/api/validations"
 	"GOLANG_CLEAN_WEB_API/src/config"
+
+	"GOLANG_CLEAN_WEB_API/src/pkg/logging"
+	"GOLANG_CLEAN_WEB_API/src/pkg/metrics"
 	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	//"github.com/swaggo/swag/example/basic/docs"
 )
 
+var logger = logging.NewLogger(config.GetConfig())
+
 func InitServer(cfg *config.Config) {
 	r := gin.New()
 
 	RegisterSwagger(r, cfg)
+	RegisterPrometheus()
 
 	r.Use(middlewares.DefaultStructuredLogger(cfg))
+	r.Use(middlewares.Prometheus())
 	r.Use(
 		gin.Logger(),
 		gin.RecoveryWithWriter(gin.DefaultWriter, func(c *gin.Context, err interface{}) {
@@ -68,9 +77,8 @@ func InitServer(cfg *config.Config) {
 		carModelYears := v1.Group("/car-model-years", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
 		carModelPriceHistories := v1.Group("/car-model-price-histories", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
 		carModelImage := v1.Group("/car-model-images", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
-        carModelProperties := v1.Group("/car-model-properties", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
-        carModelComments := v1.Group("/car-model-comments", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin","default"}))
-
+		carModelProperties := v1.Group("/car-model-properties", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin"}))
+		carModelComments := v1.Group("/car-model-comments", middlewares.Authentication(cfg), middlewares.Authorization([]string{"admin", "default"}))
 
 		//Test
 
@@ -100,10 +108,11 @@ func InitServer(cfg *config.Config) {
 		routers.CarModelYear(carModelYears, cfg)
 		routers.CarModelPriceHistory(carModelPriceHistories, cfg)
 		routers.CarModelImage(carModelImage, cfg)
-		routers.CarModelProperty(carModelProperties,cfg)
-		routers.CarModelComment(carModelComments,cfg)
+		routers.CarModelProperty(carModelProperties, cfg)
+		routers.CarModelComment(carModelComments, cfg)
 
 		r.Static("/static", "./uploads")
+		r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	}
 
 	log.Println("InitServer - API groups registered.")
@@ -133,3 +142,15 @@ func RegisterSwagger(r *gin.Engine, cfg *config.Config) {
 //ReadTimeout : time.Second * 10
 
 //server.ListenAndServe()
+
+func RegisterPrometheus() {
+	err := prometheus.Register(metrics.DbCall)
+	if err != nil {
+		logger.Error(logging.Prometheus, logging.Startup, err.Error(), nil)
+	}
+
+	err = prometheus.Register(metrics.HttpDuration)
+	if err != nil {
+		logger.Error(logging.Prometheus, logging.Startup, err.Error(), nil)
+	}
+}
