@@ -1,64 +1,101 @@
-🚗 Web API – سیستم خرید و فروش خودرو
-📖 معرفی
-این پروژه یک Web API قدرتمند برای مدیریت خرید و فروش خودرو است که با زبان Go توسعه داده شده. ساختار پروژه به صورت جنریک و ماژولار طراحی شده تا توسعه‌دهندگان بتوانند به راحتی عملیات CRUD (ایجاد، خواندن، بروزرسانی، حذف) را روی داده‌ها انجام دهند.
+🚗 Web API – Car Trading System
+🧠 Overview Car Trading Web API is a modular and scalable backend system built with Go. It provides a clean architecture for managing car trading operations with full CRUD support (Create, Read, Update, Delete).
 
-✨ ویژگی‌ها
-Swagger UI برای مستندسازی و تست API
+It consists of several main components:
 
-Postgres به عنوان دیتابیس اصلی
+🖥️ API Server: Handles car trading endpoints and business logic, backed by Postgres.
 
-Redis برای کش و مدیریت session
+💾 Redis: Provides caching and session management.
 
-Grafana + Prometheus برای مانیتورینگ و مشاهده متریک‌ها
+📊 Monitoring Stack: Grafana + Prometheus for metrics, ELK Stack for logs.
 
-ELK Stack (Elasticsearch, Logstash, Kibana) برای مدیریت و تحلیل لاگ‌ها
+📄 Swagger UI: Interactive API documentation and testing.
 
-ساختار جنریک برای عملیات CRUD
+The goal is to deliver a high‑performance, production‑ready API for car trading platforms.
 
-طراحی شده برای مقیاس‌پذیری بالا و کارایی سریع
+🧱 Architecture
 
-🛠 پیش‌نیازها
-Go 1.18 یا بالاتر
+Code
+       ┌──────────────┐
+       │   Client     │  ← Frontend / Consumers
+       └──────┬───────┘
+              │
+    ┌─────────▼─────────┐
+    │   API Server      │  ← Go (CRUD, Business Logic)
+    └───────┬───────────┘
+            │
+ ┌──────────▼───────────┐
+ │      Postgres        │  ← Main Database
+ └──────────▲───────────┘
+            │
+ ┌──────────┴───────────┐
+ │       Redis          │  ← Cache / Session
+ └──────────▲───────────┘
+            │
+ ┌──────────┴───────────┐
+ │ Monitoring & Logging │  ← Grafana, Prometheus, ELK
+ └──────────────────────┘
+🚀 Features
 
-Postgres
+✅ API Server
 
-Redis
+Full CRUD operations for cars, users, and orders
 
-Docker (برای اجرای ELK و Grafana/Prometheus)
+Generic structure for easy extension
 
-📦 نصب و اجرا
-کلون کردن ریپوزیتوری:
+Swagger UI for documentation and testing
+
+💾 Data Layer
+
+Postgres as the main relational database
+
+Redis for caching and session management
+
+📊 Monitoring & Logging
+
+Grafana dashboards for real‑time metrics
+
+Prometheus for metric collection
+
+ELK Stack (Elasticsearch, Logstash, Kibana) for log analysis
+
+⚙️ Installation
+
+Requirements: Go 1.18+, Postgres, Redis, Docker (for monitoring stack)
+
+Clone the repository:
 
 bash
 git clone https://github.com/sajjadmokhtari/web_api.git
 cd web_api
-نصب وابستگی‌ها:
+Install dependencies:
 
 bash
 go mod tidy
-اجرای پروژه:
+Run the project:
 
 bash
 go run src/main.go
-📂 ساختار پروژه
-src/ → کد اصلی پروژه
+🛠️ Usage
 
-config/ → فایل‌های تنظیمات (YAML)
+Run the API Server
 
-docker-elk/ → تنظیمات ELK Stack
+bash
+go run src/main.go
+The server will start and expose endpoints for car trading operations.
 
-monitoring/ → تنظیمات Grafana و Prometheus
-
-docs/ → مستندات Swagger
-
-🔗 مستندات API
-پس از اجرای پروژه، مستندات Swagger UI در مسیر زیر در دسترس خواهد بود:
+Access Swagger UI
 
 Code
 http://localhost:8080/swagger/index.html
-📊 مانیتورینگ و لاگ‌ها
-Grafana: داشبوردهای مانیتورینگ سرویس‌ها
+Example Endpoints
 
-Prometheus: جمع‌آوری متریک‌ها
+POST /cars → Add a new car
 
-ELK Stack: مدیریت و تحلیل لاگ‌ها
+GET /cars/{id} → Get car details
+
+PUT /cars/{id} → Update car info
+
+DELETE /cars/{id} → Remove a car
+
+POST /orders → Create a new order
